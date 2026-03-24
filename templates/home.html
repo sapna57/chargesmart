@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .hero-section {
+        min-height: calc(100vh - 140px);
+        display: flex;
+        align-items: center;
+        padding: 30px 0 20px;
+    }
+
+    .hero-badge {
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 999px;
+        background: rgba(0, 255, 170, 0.12);
+        color: #7fffd4;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+        border: 1px solid rgba(127, 255, 212, 0.2);
+    }
+
+    .hero-title {
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 20px;
+        line-height: 1.15;
+    }
+
+    .hero-title span {
+        color: #58f0b3;
+    }
+
+    .hero-text {
+        color: #d0d9ea;
+        margin-bottom: 30px;
+        font-size: 1.05rem;
+        line-height: 1.7;
+    }
+
+    .btn-main {
+        background: linear-gradient(90deg, #19c37d, #12a66a);
+        color: white;
+        border-radius: 10px;
+        padding: 10px 20px;
+        border: none;
+        margin-right: 10px;
+    }
+
+    .btn-outline-custom {
+        border: 1px solid rgba(255,255,255,0.3);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+    }
+
+    .hero-card {
+        background: rgba(255,255,255,0.08);
+        border-radius: 20px;
+        padding: 20px;
+        border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .station-box {
+        background: rgba(255,255,255,0.05);
+        padding: 15px;
+        border-radius: 15px;
+        margin-bottom: 10px;
+    }
+
+    .status {
+        font-size: 0.8rem;
+        padding: 5px 10px;
+        border-radius: 20px;
+        display: inline-block;
+    }
+
+    .available {
+        background: rgba(0,255,100,0.2);
+    }
+
+    .busy {
+        background: rgba(255,200,0,0.2);
+    }
+
+    .stats-row {
+        margin-top: 30px;
+    }
+
+    .stats-card h3,
+    .stats-card p {
+        margin: 0;
+    }
+
+    .stats-card h3 {
+        font-size: 2rem;
+        font-weight: 800;
+        margin-bottom: 8px;
+    }
+
+    .stats-card p {
+        color: #d0d9ea;
+    }
+
+    @media (max-width: 991px) {
+        .hero-section {
+            min-height: auto;
+            padding: 30px 0 10px;
+        }
+
+        .hero-title {
+            font-size: 2.4rem;
+        }
+
+        .hero-card {
+            margin-top: 30px;
+        }
+    }
+</style>
+
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center g-4">
+
+            <div class="col-lg-6">
+                <div class="hero-badge">Smart EV Charging Management Platform</div>
+
+                <h1 class="hero-title">
+                    Power your journey with <span>smart EV charging</span>
+                </h1>
+
+                <p class="hero-text">
+                    ChargeSmart helps users discover EV charging stations, check slot availability,
+                    book charging sessions, and manage bookings with a smooth and professional experience.
+                </p>
+
+                <a href="{% url 'stations' %}" class="btn btn-main">Explore Stations</a>
+                <a href="{% url 'stations' %}" class="btn btn-outline-custom">Book Your Slot</a>
+
+                <div class="row stats-row g-3">
+                    <div class="col-md-4">
+                        <div class="hero-card stats-card text-center">
+                            <h3>150+</h3>
+                            <p>Charging Points</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="hero-card stats-card text-center">
+                            <h3>24/7</h3>
+                            <p>Availability</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="hero-card stats-card text-center">
+                            <h3>100%</h3>
+                            <p>Digital Booking</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="hero-card">
+                    <h5 class="mb-3">Nearby Charging Stations</h5>
+
+                    <div class="station-box">
+                        <b>ChargeSmart Hub – Bengaluru</b><br>
+                        Fast DC Charging • ₹18/kWh • 12 Slots<br>
+                        <span class="status available">8 Slots Available</span>
+                    </div>
+
+                    <div class="station-box">
+                        <b>GreenVolt Station – Hyderabad</b><br>
+                        AC + DC Charging • ₹16/kWh • 10 Slots<br>
+                        <span class="status busy">Limited Slots</span>
+                    </div>
+
+                    <div class="station-box">
+                        <b>EcoCharge Point – Pune</b><br>
+                        Fast Charging • ₹20/kWh • 14 Slots<br>
+                        <span class="status available">11 Slots Available</span>
+                    </div>
+
+                    <div class="station-box">
+                        <b>Urban EV Connect – Mumbai</b><br>
+                        Premium Station • ₹22/kWh • 16 Slots<br>
+                        <span class="status available">6 Slots Available</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .register-section {
+        min-height: 85vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 0;
+    }
+
+    .register-card {
+        background: rgba(255,255,255,0.08);
+        border-radius: 20px;
+        padding: 35px;
+        width: 100%;
+        max-width: 500px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    .register-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .register-subtitle {
+        text-align: center;
+        color: #cbd5e1;
+        margin-bottom: 25px;
+    }
+
+    .form-control {
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        color: white;
+        border-radius: 12px;
+        padding: 12px;
+    }
+
+    .form-control::placeholder {
+        color: #b8c4d8;
+    }
+
+    .form-control:focus {
+        background: rgba(255,255,255,0.12);
+        color: white;
+        border-color: #19c37d;
+        box-shadow: none;
+    }
+
+    .register-btn {
+        width: 100%;
+        background: linear-gradient(90deg, #19c37d, #12a66a);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 12px;
+        font-weight: 600;
+        margin-top: 10px;
+    }
+
+    .bottom-text {
+        text-align: center;
+        margin-top: 20px;
+        color: #cbd5e1;
+    }
+
+    .bottom-text a {
+        color: #58f0b3;
+        text-decoration: none;
+    }
+
+    .message-box {
+        background: rgba(255, 255, 255, 0.08);
+        border-left: 4px solid #19c37d;
+        color: #ffffff;
+        padding: 10px 14px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+
+    .message-error {
+        border-left-color: #ff6b6b;
+    }
+
+    .message-success {
+        border-left-color: #19c37d;
+    }
+</style>
+
+<section class="register-section">
+    <div class="register-card">
+        <h2 class="register-title">Create Account</h2>
+        <p class="register-subtitle">Join ChargeSmart and start booking EV slots</p>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message-box {% if message.tags == 'error' %}message-error{% endif %} {% if message.tags == 'success' %}message-success{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <input
+                type="text"
+                name="full_name"
+                class="form-control mb-3"
+                placeholder="Full Name"
+                pattern="[A-Za-z ]+"
+                title="Full name should contain only letters and spaces"
+                required
+            >
+
+            <input
+                type="email"
+                name="email"
+                class="form-control mb-3"
+                placeholder="Email"
+                required
+            >
+
+            <input
+                type="text"
+                name="username"
+                class="form-control mb-3"
+                placeholder="Username"
+                pattern="[A-Za-z0-9_]+"
+                title="Username can contain only letters, numbers, and underscore"
+                minlength="4"
+                required
+            >
+
+            <input
+                type="password"
+                name="password"
+                class="form-control mb-3"
+                placeholder="Password"
+                minlength="6"
+                title="Password must be at least 6 characters"
+                required
+            >
+
+            <input
+                type="password"
+                name="confirm_password"
+                class="form-control mb-3"
+                placeholder="Confirm Password"
+                minlength="6"
+                required
+            >
+
+            <button type="submit" class="register-btn">Register</button>
+        </form>
+
+        <p class="bottom-text">
+            Already have an account? <a href="{% url 'login' %}">Login</a>
+        </p>
+    </div>
+</section>
+
+{% endblock %}

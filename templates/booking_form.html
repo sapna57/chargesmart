@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .booking-section {
+        min-height: 85vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 0;
+    }
+
+    .booking-card {
+        background: rgba(255,255,255,0.08);
+        border-radius: 20px;
+        padding: 35px;
+        width: 100%;
+        max-width: 600px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    .booking-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .booking-subtitle {
+        text-align: center;
+        color: #cbd5e1;
+        margin-bottom: 25px;
+    }
+
+    .station-box {
+        background: rgba(255,255,255,0.06);
+        border-radius: 14px;
+        padding: 16px;
+        margin-bottom: 20px;
+        color: #dbe7ff;
+    }
+
+.form-control, .form-control:focus, textarea.form-control {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: white;
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: none;
+}
+
+select.form-control {
+    color: white;
+}
+
+select.form-control option {
+    color: black;
+    background: white;
+}
+
+    .form-control::placeholder {
+        color: #b8c4d8;
+    }
+
+    .form-label {
+        color: #e5edf8;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+    .booking-btn {
+        width: 100%;
+        background: linear-gradient(90deg, #19c37d, #12a66a);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 12px;
+        font-weight: 600;
+        margin-top: 10px;
+    }
+
+    .booking-btn:hover {
+        background: linear-gradient(90deg, #18b172, #108e5c);
+    }
+
+    .booking-btn:disabled {
+        background: rgba(255,255,255,0.12);
+        color: #cbd5e1;
+        cursor: not-allowed;
+    }
+
+    .status-badge {
+        display: inline-block;
+        margin-top: 12px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 0.82rem;
+        font-weight: 700;
+    }
+
+    .status-available {
+        background: rgba(25, 195, 125, 0.18);
+        color: #7dffbf;
+        border: 1px solid rgba(125, 255, 191, 0.25);
+    }
+
+    .status-full {
+        background: rgba(255, 107, 107, 0.18);
+        color: #ff9d9d;
+        border: 1px solid rgba(255, 157, 157, 0.25);
+    }
+</style>
+
+<section class="booking-section">
+    <div class="booking-card">
+        <h2 class="booking-title">Book Charging Slot</h2>
+        <p class="booking-subtitle">Fill your details to confirm your EV charging slot</p>
+
+        <div class="station-box">
+            <strong>Station:</strong> {{ station.name }}<br>
+            <strong>City:</strong> {{ station.city }}<br>
+            <strong>Charger Type:</strong> {{ station.charger_type }}<br>
+            <strong>Available Slots:</strong> {{ station.available_slots }}<br>
+            <strong>Price:</strong> ₹{{ station.price_per_kwh }}/kWh<br>
+
+            {% if station.available_slots > 0 %}
+                <span class="status-badge status-available">Available</span>
+            {% else %}
+                <span class="status-badge status-full">Full</span>
+            {% endif %}
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="mb-3">
+    <label class="form-label">Full Name</label>
+    <input
+        type="text"
+        name="full_name"
+        class="form-control"
+        value="{{ request.user.first_name }}"
+        placeholder="Enter your full name"
+        pattern="[A-Za-z ]+"
+        title="Full name should contain only letters and spaces"
+        required>
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Email ID</label>
+    <input
+        type="email"
+        name="email"
+        class="form-control"
+        value="{{ request.user.email }}"
+        placeholder="Enter your email"
+        required>
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Phone Number</label>
+    <input
+        type="text"
+        name="phone_number"
+        class="form-control"
+        placeholder="Enter your 10-digit phone number"
+        pattern="[0-9]{10}"
+        maxlength="10"
+        title="Phone number must contain exactly 10 digits"
+        required>
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Address</label>
+    <textarea name="address" class="form-control" rows="3" placeholder="Enter your address" required></textarea>
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Vehicle Type</label>
+    <select name="vehicle_type" class="form-control" required>
+        <option value="">Select vehicle type</option>
+        <option value="2 Wheeler">2 Wheeler</option>
+        <option value="4 Wheeler">4 Wheeler</option>
+    </select>
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Vehicle Number</label>
+    <input
+        type="text"
+        name="vehicle_number"
+        class="form-control"
+        placeholder="Enter your vehicle number"
+        pattern="[A-Za-z0-9 ]+"
+        title="Vehicle number can contain letters, numbers, and spaces only">
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Charging Date</label>
+    <input type="date" name="booking_date" class="form-control" required>
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Time Slot</label>
+    <select name="time_slot" class="form-control" required>
+        <option value="">Select time slot</option>
+        <option value="09:00 AM - 10:00 AM">09:00 AM - 10:00 AM</option>
+        <option value="10:00 AM - 11:00 AM">10:00 AM - 11:00 AM</option>
+        <option value="11:00 AM - 12:00 PM">11:00 AM - 12:00 PM</option>
+        <option value="12:00 PM - 01:00 PM">12:00 PM - 01:00 PM</option>
+        <option value="02:00 PM - 03:00 PM">02:00 PM - 03:00 PM</option>
+        <option value="03:00 PM - 04:00 PM">03:00 PM - 04:00 PM</option>
+        <option value="04:00 PM - 05:00 PM">04:00 PM - 05:00 PM</option>
+        <option value="05:00 PM - 06:00 PM">05:00 PM - 06:00 PM</option>
+    </select>
+</div>
+
+            {% if station.available_slots > 0 %}
+                <button type="submit" class="booking-btn">Confirm Booking</button>
+            {% else %}
+                <button type="submit" class="booking-btn" disabled>No Slots Available</button>
+            {% endif %}
+        </form>
+    </div>
+</section>
+
+{% endblock %}

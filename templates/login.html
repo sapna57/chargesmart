@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .login-section {
+        min-height: 85vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 0;
+    }
+
+    .login-card {
+        background: rgba(255,255,255,0.08);
+        border-radius: 20px;
+        padding: 35px;
+        width: 100%;
+        max-width: 450px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    .login-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .login-subtitle {
+        text-align: center;
+        color: #cbd5e1;
+        margin-bottom: 25px;
+    }
+
+    .form-label {
+        color: #e5edf8;
+        margin-bottom: 8px;
+    }
+
+    .form-control {
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        color: white;
+        border-radius: 12px;
+        padding: 12px;
+    }
+
+    .form-control:focus {
+        background: rgba(255,255,255,0.12);
+        color: white;
+        border-color: #19c37d;
+        box-shadow: none;
+    }
+
+    .form-control::placeholder {
+        color: #b8c4d8;
+    }
+
+    .login-btn {
+        width: 100%;
+        background: linear-gradient(90deg, #19c37d, #12a66a);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 12px;
+        font-weight: 600;
+        margin-top: 10px;
+    }
+
+    .login-btn:hover {
+        background: linear-gradient(90deg, #18b172, #108e5c);
+    }
+
+    .bottom-text {
+        text-align: center;
+        margin-top: 20px;
+        color: #cbd5e1;
+    }
+
+    .bottom-text a {
+        color: #58f0b3;
+        text-decoration: none;
+    }
+
+    .message-box {
+        background: rgba(255, 255, 255, 0.08);
+        border-left: 4px solid #19c37d;
+        color: #ffffff;
+        padding: 10px 14px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+
+    .message-error {
+        border-left-color: #ff6b6b;
+    }
+
+    .message-success {
+        border-left-color: #19c37d;
+    }
+</style>
+
+<section class="login-section">
+    <div class="login-card">
+        <h2 class="login-title">Welcome Back</h2>
+        <p class="login-subtitle">Login to continue using ChargeSmart</p>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message-box {% if message.tags == 'error' %}message-error{% endif %} {% if message.tags == 'success' %}message-success{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" placeholder="Enter your username" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
+            </div>
+
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+
+        <p class="bottom-text">
+            Don’t have an account? <a href="{% url 'register' %}">Register</a>
+        </p>
+    </div>
+</section>
+
+{% endblock %}

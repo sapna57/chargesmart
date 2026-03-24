@@ -1,0 +1,458 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .dashboard-section {
+        padding: 60px 0 80px;
+        min-height: 80vh;
+    }
+
+    .hero-panel {
+        background: linear-gradient(135deg, rgba(25, 195, 125, 0.12), rgba(88, 240, 179, 0.05), rgba(255,255,255,0.04));
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 28px;
+        padding: 32px;
+        margin-bottom: 32px;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-panel::before {
+        content: "";
+        position: absolute;
+        top: -60px;
+        right: -60px;
+        width: 180px;
+        height: 180px;
+        background: radial-gradient(circle, rgba(88,240,179,0.18), transparent 70%);
+        border-radius: 50%;
+    }
+
+    .hero-badge {
+        display: inline-block;
+        padding: 7px 14px;
+        border-radius: 999px;
+        background: rgba(88, 240, 179, 0.12);
+        color: #7fffd4;
+        border: 1px solid rgba(127,255,212,0.18);
+        font-size: 0.85rem;
+        font-weight: 700;
+        margin-bottom: 14px;
+    }
+
+    .dashboard-title {
+        font-size: 2.6rem;
+        font-weight: 800;
+        margin-bottom: 10px;
+        letter-spacing: -0.5px;
+    }
+
+    .dashboard-subtitle {
+        color: #cbd5e1;
+        font-size: 1rem;
+        max-width: 760px;
+        margin-bottom: 0;
+    }
+
+    .stats-card {
+        background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
+        border-radius: 24px;
+        padding: 24px;
+        height: 100%;
+        border: 1px solid rgba(255,255,255,0.08);
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.18);
+        transition: 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stats-card::after {
+        content: "";
+        position: absolute;
+        top: -35px;
+        right: -35px;
+        width: 100px;
+        height: 100px;
+        background: radial-gradient(circle, rgba(88,240,179,0.16), transparent 70%);
+        border-radius: 50%;
+    }
+
+    .stats-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24);
+        border-color: rgba(88,240,179,0.18);
+    }
+
+    .stats-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 16px;
+    }
+
+    .stats-label {
+        color: #9fc0ff;
+        font-size: 0.95rem;
+        font-weight: 700;
+        margin-bottom: 6px;
+    }
+
+    .stats-sub {
+        color: #b8c4d8;
+        font-size: 0.82rem;
+    }
+
+    .stats-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: #7fffd4;
+        background: rgba(88, 240, 179, 0.10);
+        border: 1px solid rgba(88,240,179,0.16);
+    }
+
+    .stats-value {
+        font-size: 2.3rem;
+        font-weight: 800;
+        color: white;
+        line-height: 1;
+    }
+
+    .content-card {
+        background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.05));
+        border-radius: 26px;
+        padding: 26px;
+        border: 1px solid rgba(255,255,255,0.08);
+        box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
+        height: 100%;
+    }
+
+    .section-title {
+        font-size: 1.35rem;
+        font-weight: 800;
+        margin-bottom: 18px;
+    }
+
+    .section-subtitle {
+        color: #cbd5e1;
+        font-size: 0.92rem;
+        margin-bottom: 18px;
+    }
+
+    .summary-list {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .summary-item {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 18px;
+        padding: 16px;
+    }
+
+    .summary-head {
+        font-weight: 700;
+        color: white;
+        margin-bottom: 6px;
+    }
+
+    .summary-text {
+        color: #cbd5e1;
+        font-size: 0.92rem;
+        line-height: 1.55;
+    }
+
+    .recent-box {
+        margin-top: 34px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.05));
+        border-radius: 26px;
+        padding: 26px;
+        border: 1px solid rgba(255,255,255,0.08);
+        box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
+    }
+
+    .recent-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 18px;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .recent-title {
+        font-size: 1.4rem;
+        font-weight: 800;
+        margin-bottom: 0;
+    }
+
+    .recent-pill {
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        background: rgba(88,240,179,0.10);
+        color: #7fffd4;
+        border: 1px solid rgba(88,240,179,0.16);
+    }
+
+    .booking-item {
+        padding: 18px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        color: #dbe7ff;
+    }
+
+    .booking-item:last-child {
+        border-bottom: none;
+    }
+
+    .booking-main {
+        font-weight: 800;
+        color: white;
+        font-size: 1rem;
+        margin-bottom: 8px;
+    }
+
+    .booking-meta-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .booking-meta-box {
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 14px;
+        padding: 12px;
+    }
+
+    .booking-meta-label {
+        color: #90b5ff;
+        font-size: 0.78rem;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+    .booking-meta-value {
+        color: #e6eefc;
+        font-size: 0.92rem;
+        line-height: 1.45;
+        word-break: break-word;
+    }
+
+    .status-badge {
+        display: inline-block;
+        margin-top: 4px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 800;
+    }
+
+    .status-booked {
+        background: rgba(25, 195, 125, 0.18);
+        color: #7dffbf;
+        border: 1px solid rgba(125, 255, 191, 0.25);
+    }
+
+    .status-cancelled {
+        background: rgba(255, 107, 107, 0.18);
+        color: #ff9d9d;
+        border: 1px solid rgba(255, 157, 157, 0.25);
+    }
+
+    .empty-box {
+        color: #dbe7ff;
+        text-align: center;
+        padding: 28px 0 12px;
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-title {
+            font-size: 2rem;
+        }
+
+        .hero-panel,
+        .content-card,
+        .recent-box,
+        .stats-card {
+            padding: 20px;
+        }
+    }
+</style>
+
+<section class="dashboard-section">
+    <div class="container">
+        <div class="hero-panel">
+            <span class="hero-badge">ADMIN CONTROL CENTER</span>
+            <h2 class="dashboard-title">Admin Dashboard</h2>
+            <p class="dashboard-subtitle">
+                Monitor users, stations, bookings, and overall charging activity from one unified professional dashboard.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4 col-xl-3">
+                <div class="stats-card">
+                    <div class="stats-top">
+                        <div>
+                            <div class="stats-label">Total Users</div>
+                            <div class="stats-sub">Registered accounts</div>
+                        </div>
+                        <div class="stats-icon">U</div>
+                    </div>
+                    <div class="stats-value">{{ total_users }}</div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 col-xl-3">
+                <div class="stats-card">
+                    <div class="stats-top">
+                        <div>
+                            <div class="stats-label">Total Stations</div>
+                            <div class="stats-sub">Charging locations</div>
+                        </div>
+                        <div class="stats-icon">S</div>
+                    </div>
+                    <div class="stats-value">{{ total_stations }}</div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 col-xl-3">
+                <div class="stats-card">
+                    <div class="stats-top">
+                        <div>
+                            <div class="stats-label">Total Bookings</div>
+                            <div class="stats-sub">Overall reservations</div>
+                        </div>
+                        <div class="stats-icon">B</div>
+                    </div>
+                    <div class="stats-value">{{ total_bookings }}</div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 col-xl-3">
+                <div class="stats-card">
+                    <div class="stats-top">
+                        <div>
+                            <div class="stats-label">Active Bookings</div>
+                            <div class="stats-sub">Currently booked</div>
+                        </div>
+                        <div class="stats-icon">A</div>
+                    </div>
+                    <div class="stats-value">{{ active_bookings }}</div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4 col-xl-3">
+                <div class="stats-card">
+                    <div class="stats-top">
+                        <div>
+                            <div class="stats-label">Cancelled Bookings</div>
+                            <div class="stats-sub">Expired or cancelled</div>
+                        </div>
+                        <div class="stats-icon">C</div>
+                    </div>
+                    <div class="stats-value">{{ cancelled_bookings }}</div>
+                </div>
+            </div>
+
+            <div class="col-lg-8 col-xl-9">
+                <div class="content-card">
+                    <h3 class="section-title">System Overview</h3>
+                    <p class="section-subtitle">
+                        Quick insight into how the platform is currently performing.
+                    </p>
+
+                    <div class="summary-list">
+                        <div class="summary-item">
+                            <div class="summary-head">User Activity</div>
+                            <div class="summary-text">
+                                The platform currently has <strong>{{ total_users }}</strong> registered user{{ total_users|pluralize }}
+                                interacting with <strong>{{ total_stations }}</strong> charging station{{ total_stations|pluralize }}.
+                            </div>
+                        </div>
+
+                        <div class="summary-item">
+                            <div class="summary-head">Reservation Health</div>
+                            <div class="summary-text">
+                                Out of <strong>{{ total_bookings }}</strong> total booking{{ total_bookings|pluralize }},
+                                <strong>{{ active_bookings }}</strong> are active and
+                                <strong>{{ cancelled_bookings }}</strong> have been cancelled or auto-expired.
+                            </div>
+                        </div>
+
+                        <div class="summary-item">
+                            <div class="summary-head">Operational Readiness</div>
+                            <div class="summary-text">
+                                This dashboard helps administrators track reservation flow, monitor slot usage,
+                                and observe recent station booking activity in one place.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="recent-box">
+            <div class="recent-header">
+                <h3 class="recent-title">Recent Bookings</h3>
+                <span class="recent-pill">Latest 5 reservations</span>
+            </div>
+
+            {% if recent_bookings %}
+                {% for booking in recent_bookings %}
+                    <div class="booking-item">
+                        <div class="booking-main">
+                            {{ booking.full_name }} booked {{ booking.station.name }}
+                        </div>
+
+                        <div class="booking-meta-grid">
+                            <div class="booking-meta-box">
+                                <div class="booking-meta-label">City</div>
+                                <div class="booking-meta-value">{{ booking.station.city }}</div>
+                            </div>
+
+                            <div class="booking-meta-box">
+                                <div class="booking-meta-label">Date</div>
+                                <div class="booking-meta-value">{{ booking.booking_date }}</div>
+                            </div>
+
+                            <div class="booking-meta-box">
+                                <div class="booking-meta-label">Time Slot</div>
+                                <div class="booking-meta-value">{{ booking.time_slot }}</div>
+                            </div>
+
+                            <div class="booking-meta-box">
+                                <div class="booking-meta-label">Email</div>
+                                <div class="booking-meta-value">{{ booking.email }}</div>
+                            </div>
+                        </div>
+
+                        {% if booking.status == 'Booked' %}
+                            <span class="status-badge status-booked">Booked</span>
+                        {% else %}
+                            <span class="status-badge status-cancelled">Cancelled</span>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-box">
+                    No bookings available yet.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}

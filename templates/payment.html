@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .payment-section {
+        padding: 60px 0 80px;
+        min-height: 80vh;
+    }
+
+    .payment-card {
+        background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
+        border-radius: 24px;
+        padding: 28px;
+        border: 1px solid rgba(255,255,255,0.08);
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.18);
+    }
+
+    .payment-title {
+        font-size: 2rem;
+        font-weight: 800;
+        margin-bottom: 8px;
+    }
+
+    .payment-subtitle {
+        color: #cbd5e1;
+        margin-bottom: 24px;
+    }
+
+    .summary-box {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 18px;
+        padding: 18px;
+        margin-bottom: 18px;
+    }
+
+    .summary-label {
+        color: #8fb8ff;
+        font-size: 0.82rem;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+
+    .summary-value {
+        color: white;
+        font-size: 1rem;
+    }
+
+    .amount-box {
+        background: rgba(25, 195, 125, 0.12);
+        border: 1px solid rgba(125, 255, 191, 0.18);
+        border-radius: 18px;
+        padding: 18px;
+        margin-bottom: 24px;
+    }
+
+    .amount-title {
+        color: #bfead5;
+        font-size: 0.9rem;
+        font-weight: 700;
+        margin-bottom: 6px;
+    }
+
+    .amount-value {
+        color: #7dffbf;
+        font-size: 2rem;
+        font-weight: 800;
+    }
+
+    .payment-method-box {
+        margin-bottom: 24px;
+    }
+
+    .form-check {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 14px;
+        padding: 14px 16px;
+        margin-bottom: 12px;
+    }
+
+    .form-check-label {
+        color: white;
+        font-weight: 600;
+        margin-left: 8px;
+    }
+
+    .pay-btn {
+        width: 100%;
+        border: none;
+        border-radius: 14px;
+        padding: 14px 16px;
+        font-weight: 800;
+        background: linear-gradient(90deg, #19c37d, #12a66a);
+        color: white;
+        font-size: 1rem;
+    }
+
+    .pay-btn:hover {
+        background: linear-gradient(90deg, #18b172, #108e5c);
+    }
+</style>
+
+<section class="payment-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="payment-card">
+                    <h2 class="payment-title">Complete Payment</h2>
+                    <p class="payment-subtitle">Review your booking details and choose a payment method.</p>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="summary-box">
+                                <div class="summary-label">Station</div>
+                                <div class="summary-value">{{ station.name }}</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="summary-box">
+                                <div class="summary-label">City</div>
+                                <div class="summary-value">{{ station.city }}</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="summary-box">
+                                <div class="summary-label">Booking Date</div>
+                                <div class="summary-value">{{ pending_booking.booking_date }}</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="summary-box">
+                                <div class="summary-label">Time Slot</div>
+                                <div class="summary-value">{{ pending_booking.time_slot }}</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="summary-box">
+                                <div class="summary-label">Vehicle Type</div>
+                                <div class="summary-value">{{ pending_booking.vehicle_type }}</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="summary-box">
+                                <div class="summary-label">Vehicle Number</div>
+                                <div class="summary-value">{{ pending_booking.vehicle_number|default:"Not Provided" }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="amount-box">
+                        <div class="amount-title">Total Payable Amount</div>
+                        <div class="amount-value">₹{{ amount }}</div>
+                    </div>
+
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <div class="payment-method-box">
+                            <div class="summary-label mb-2">Choose Payment Method</div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="payment_method" value="UPI" id="upi">
+                                <label class="form-check-label" for="upi">UPI</label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="payment_method" value="Card" id="card">
+                                <label class="form-check-label" for="card">Credit / Debit Card</label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="payment_method" value="Wallet" id="wallet">
+                                <label class="form-check-label" for="wallet">Wallet</label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="payment_method" value="Net Banking" id="netbanking">
+                                <label class="form-check-label" for="netbanking">Net Banking</label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="pay-btn">Pay Now & Confirm Booking</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

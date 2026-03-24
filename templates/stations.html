@@ -1,0 +1,556 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .stations-section {
+        padding: 60px 0 80px;
+        min-height: 80vh;
+    }
+
+    .hero-panel {
+        background: linear-gradient(135deg, rgba(25, 195, 125, 0.12), rgba(88, 240, 179, 0.05), rgba(255,255,255,0.04));
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 28px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-panel::before {
+        content: "";
+        position: absolute;
+        top: -60px;
+        right: -60px;
+        width: 180px;
+        height: 180px;
+        background: radial-gradient(circle, rgba(88,240,179,0.18), transparent 70%);
+        border-radius: 50%;
+    }
+
+    .hero-badge {
+        display: inline-block;
+        padding: 7px 14px;
+        border-radius: 999px;
+        background: rgba(88, 240, 179, 0.12);
+        color: #7fffd4;
+        border: 1px solid rgba(127,255,212,0.18);
+        font-size: 0.85rem;
+        font-weight: 700;
+        margin-bottom: 14px;
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 10px;
+        letter-spacing: -0.5px;
+    }
+
+    .page-subtitle {
+        color: #cbd5e1;
+        max-width: 760px;
+        margin-bottom: 0;
+        font-size: 1rem;
+    }
+
+    .location-box,
+    .filter-box {
+        background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.05));
+        border-radius: 24px;
+        padding: 22px;
+        margin-bottom: 26px;
+        border: 1px solid rgba(255,255,255,0.08);
+        box-shadow: 0 12px 26px rgba(0, 0, 0, 0.16);
+    }
+
+    .section-small-title {
+        font-size: 1.1rem;
+        font-weight: 800;
+        margin-bottom: 10px;
+    }
+
+    .section-small-text {
+        color: #cbd5e1;
+        font-size: 0.94rem;
+        margin-bottom: 16px;
+    }
+
+    .form-control, .form-select {
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.15);
+        color: white;
+        border-radius: 14px;
+        padding: 12px 14px;
+        box-shadow: none;
+    }
+
+    .form-control:focus, .form-select:focus {
+        background: rgba(255,255,255,0.12);
+        color: white;
+        border-color: #19c37d;
+        box-shadow: none;
+    }
+
+    .form-control::placeholder {
+        color: #b8c4d8;
+    }
+
+    .form-select option {
+        color: black;
+        background: white;
+    }
+
+    .location-text {
+        color: #dbe7ff;
+        margin-top: 14px;
+        font-size: 0.95rem;
+    }
+
+    .station-card {
+        background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
+        border-radius: 24px;
+        padding: 22px;
+        height: 100%;
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.18);
+        transition: 0.3s ease;
+        border: 1px solid rgba(255,255,255,0.08);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .station-card::after {
+        content: "";
+        position: absolute;
+        top: -35px;
+        right: -35px;
+        width: 100px;
+        height: 100px;
+        background: radial-gradient(circle, rgba(88,240,179,0.14), transparent 70%);
+        border-radius: 50%;
+    }
+
+    .station-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 18px 34px rgba(0, 0, 0, 0.24);
+        border-color: rgba(88,240,179,0.16);
+    }
+
+    .station-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+
+    .station-name {
+        font-size: 1.22rem;
+        font-weight: 800;
+        margin-bottom: 4px;
+        line-height: 1.35;
+    }
+
+    .station-city {
+        color: #9fc0ff;
+        font-size: 0.92rem;
+        font-weight: 600;
+    }
+
+    .distance-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 800;
+        background: rgba(88, 240, 179, 0.12);
+        color: #7fffd4;
+        border: 1px solid rgba(127,255,212,0.18);
+        white-space: nowrap;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+
+    .info-box {
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 16px;
+        padding: 12px;
+    }
+
+    .info-label {
+        color: #8fb8ff;
+        font-size: 0.78rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .info-value {
+        color: #e7eefb;
+        font-size: 0.94rem;
+        line-height: 1.45;
+        word-break: break-word;
+    }
+
+    .address-box {
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 16px;
+        padding: 12px;
+        margin-bottom: 14px;
+    }
+
+    .address-label {
+        color: #8fb8ff;
+        font-size: 0.78rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .address-value {
+        color: #e7eefb;
+        font-size: 0.94rem;
+        line-height: 1.45;
+    }
+
+    .slots-pill {
+        display: inline-block;
+        margin-top: 2px;
+        margin-bottom: 12px;
+        padding: 7px 14px;
+        border-radius: 999px;
+        font-size: 0.82rem;
+        font-weight: 800;
+        background: rgba(25, 195, 125, 0.18);
+        color: #7dffbf;
+        border: 1px solid rgba(125, 255, 191, 0.25);
+    }
+
+    .status-badge {
+        display: inline-block;
+        margin-bottom: 14px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 800;
+    }
+
+    .status-available {
+        background: rgba(25, 195, 125, 0.18);
+        color: #7dffbf;
+        border: 1px solid rgba(125, 255, 191, 0.25);
+    }
+
+    .status-full {
+        background: rgba(255, 107, 107, 0.18);
+        color: #ff9d9d;
+        border: 1px solid rgba(255, 157, 157, 0.25);
+    }
+
+    .btn-main {
+        width: 100%;
+        border: none;
+        border-radius: 14px;
+        padding: 12px 16px;
+        font-weight: 700;
+        background: linear-gradient(90deg, #19c37d, #12a66a);
+        color: white;
+        box-shadow: 0 10px 20px rgba(18, 166, 106, 0.18);
+        transition: 0.25s ease;
+    }
+
+    .btn-main:hover {
+        transform: translateY(-2px);
+        color: white;
+        background: linear-gradient(90deg, #18b172, #108e5c);
+    }
+
+    .btn-disabled-custom {
+        width: 100%;
+        border-radius: 14px;
+        padding: 12px 16px;
+        font-weight: 700;
+        border: 1px solid rgba(255,255,255,0.08);
+        background: rgba(255,255,255,0.10);
+        color: #cbd5e1;
+        cursor: not-allowed;
+    }
+
+    .btn-location {
+        width: 100%;
+        border-radius: 14px;
+        padding: 11px 16px;
+        font-weight: 700;
+    }
+
+    .empty-box {
+        background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.05));
+        border-radius: 24px;
+        padding: 50px 24px;
+        text-align: center;
+        color: #dbe7ff;
+        border: 1px solid rgba(255,255,255,0.08);
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.18);
+    }
+
+    .empty-box h4 {
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin-bottom: 10px;
+    }
+
+    .empty-box p {
+        color: #c7d4e7;
+        margin-bottom: 0;
+    }
+
+    @media (max-width: 768px) {
+        .page-title {
+            font-size: 2rem;
+        }
+
+        .hero-panel,
+        .location-box,
+        .filter-box,
+        .station-card {
+            padding: 20px;
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .station-top {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+</style>
+
+<section class="stations-section">
+    <div class="container">
+        <div class="hero-panel">
+            <span class="hero-badge">SMART STATION DISCOVERY</span>
+            <h2 class="page-title">EV Charging Stations</h2>
+            <p class="page-subtitle">
+                Explore professional EV charging stations, check live slot availability, locate nearby options, and book your preferred slot with ease.
+            </p>
+        </div>
+
+        <div class="location-box">
+            <div class="section-small-title">Find Nearby Stations</div>
+            <div class="section-small-text">
+                Detect your current location to prioritize nearby charging stations and open route guidance instantly.
+            </div>
+            <button class="btn btn-main" onclick="getUserLocation()">Use My Current Location</button>
+            <div id="location-status" class="location-text">Current location not detected yet.</div>
+        </div>
+
+        <div class="filter-box">
+            <div class="section-small-title">Search & Filter</div>
+            <div class="section-small-text">
+                Narrow stations by city and charger type to find the best charging option faster.
+            </div>
+
+            <form method="GET">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-5">
+                        <label class="form-label text-light">Search by City</label>
+                        <input
+                            type="text"
+                            name="city"
+                            class="form-control"
+                            placeholder="Enter city name"
+                            value="{{ search_city }}">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-light">Filter by Charger Type</label>
+                        <select name="charger_type" class="form-select">
+                            <option value="">All Charger Types</option>
+                            {% for type in charger_types %}
+                                <option value="{{ type }}" {% if selected_charger_type == type %}selected{% endif %}>
+                                    {{ type }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 d-grid">
+                        <button type="submit" class="btn btn-main">Search Stations</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        {% if stations %}
+            <div class="row g-4" id="stations-container">
+                {% for station in stations %}
+                    <div
+                        class="col-md-6 col-xl-4 station-wrapper"
+                        data-lat="{{ station.latitude }}"
+                        data-lng="{{ station.longitude }}"
+                    >
+                        <div class="station-card">
+                            <div class="station-top">
+                                <div>
+                                    <div class="station-name">{{ station.name }}</div>
+                                    <div class="station-city">{{ station.city }}</div>
+                                </div>
+                                <div class="distance-badge distance-text">Distance: --</div>
+                            </div>
+
+                            <div class="address-box">
+                                <div class="address-label">Address</div>
+                                <div class="address-value">{{ station.address }}</div>
+                            </div>
+
+                            <div class="info-grid">
+                                <div class="info-box">
+                                    <div class="info-label">Charger Type</div>
+                                    <div class="info-value">{{ station.charger_type }}</div>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-label">Price</div>
+                                    <div class="info-value">₹{{ station.price_per_kwh }}/kWh</div>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-label">Total Slots</div>
+                                    <div class="info-value">{{ station.total_slots }}</div>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-label">Available Slots</div>
+                                    <div class="info-value">{{ station.available_slots }}</div>
+                                </div>
+                            </div>
+
+                            <span class="slots-pill">{{ station.available_slots }} Slots Available</span>
+
+                            <br>
+
+                            {% if station.available_slots > 0 %}
+                                <span class="status-badge status-available">Available for Booking</span>
+                                <a href="{% url 'book_station' station.id %}" class="btn btn-main mb-2">Book Slot</a>
+                            {% else %}
+                                <span class="status-badge status-full">Currently Full</span>
+                                <button class="btn-disabled-custom mb-2" disabled>Fully Booked</button>
+                            {% endif %}
+
+                            <a
+                                href="https://www.google.com/maps/search/?api=1&query={{ station.latitude }},{{ station.longitude }}"
+                                target="_blank"
+                                class="btn btn-outline-light btn-location w-100 mb-2">
+                                View Location
+                            </a>
+
+                            <button
+                                class="btn btn-outline-info btn-location w-100"
+                                onclick="openDirections({{ station.latitude }}, {{ station.longitude }})">
+                                Get Route
+                            </button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-box">
+                <h4>No matching stations found</h4>
+                <p>Try searching with a different city or charger type.</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<script>
+    let userLatitude = null;
+    let userLongitude = null;
+
+    function toRadians(degrees) {
+        return degrees * (Math.PI / 180);
+    }
+
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        const earthRadius = 6371;
+        const dLat = toRadians(lat2 - lat1);
+        const dLon = toRadians(lon2 - lon1);
+
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return earthRadius * c;
+    }
+
+    function getUserLocation() {
+        const statusBox = document.getElementById('location-status');
+
+        if (!navigator.geolocation) {
+            statusBox.innerText = 'Geolocation is not supported by your browser.';
+            return;
+        }
+
+        statusBox.innerText = 'Detecting your current location...';
+
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                userLatitude = position.coords.latitude;
+                userLongitude = position.coords.longitude;
+
+                statusBox.innerText = `Location detected successfully. Latitude: ${userLatitude.toFixed(6)}, Longitude: ${userLongitude.toFixed(6)}. Nearby stations are now prioritized.`;
+
+                showNearbyStations();
+            },
+            function() {
+                statusBox.innerText = 'Unable to fetch your current location. Please allow location access.';
+            }
+        );
+    }
+
+    function showNearbyStations() {
+        const stationWrappers = Array.from(document.querySelectorAll('.station-wrapper'));
+        const stationsContainer = document.getElementById('stations-container');
+
+        stationWrappers.forEach(function(wrapper) {
+            const stationLat = parseFloat(wrapper.dataset.lat);
+            const stationLng = parseFloat(wrapper.dataset.lng);
+            const distance = calculateDistance(userLatitude, userLongitude, stationLat, stationLng);
+
+            wrapper.dataset.distance = distance;
+
+            const distanceText = wrapper.querySelector('.distance-text');
+            distanceText.innerText = `Distance: ${distance.toFixed(2)} km`;
+        });
+
+        stationWrappers.sort(function(a, b) {
+            return parseFloat(a.dataset.distance) - parseFloat(b.dataset.distance);
+        });
+
+        stationWrappers.forEach(function(wrapper) {
+            stationsContainer.appendChild(wrapper);
+        });
+    }
+
+    function openDirections(stationLatitude, stationLongitude) {
+        if (userLatitude === null || userLongitude === null) {
+            alert('Please click "Use My Current Location" first.');
+            return;
+        }
+
+        const mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLatitude},${userLongitude}&destination=${stationLatitude},${stationLongitude}&travelmode=driving`;
+        window.open(mapsUrl, '_blank');
+    }
+</script>
+
+{% endblock %}
