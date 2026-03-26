@@ -1,111 +1,183 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
 <style>
     .payment-section {
-        padding: 60px 0 80px;
-        min-height: 80vh;
+        padding: 56px 0 80px;
+        min-height: calc(100vh - 120px);
     }
 
     .payment-card {
-        background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
-        border-radius: 24px;
-        padding: 28px;
+        background:
+            linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05)),
+            radial-gradient(circle at top right, rgba(88,240,179,0.08), transparent 24%);
+        border-radius: 30px;
+        padding: 32px;
         border: 1px solid rgba(255,255,255,0.08);
-        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.18);
+        box-shadow: 0 22px 42px rgba(0,0,0,0.22);
+        backdrop-filter: blur(16px);
+        overflow: hidden;
+        position: relative;
+    }
+
+    .payment-card::before {
+        content: "";
+        position: absolute;
+        top: -70px;
+        right: -70px;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(88,240,179,0.14), transparent 70%);
+        pointer-events: none;
     }
 
     .payment-title {
-        font-size: 2rem;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 2.5rem;
         font-weight: 800;
+        letter-spacing: -0.03em;
         margin-bottom: 8px;
+        position: relative;
+        z-index: 1;
     }
 
     .payment-subtitle {
         color: #cbd5e1;
-        margin-bottom: 24px;
+        margin-bottom: 28px;
+        font-size: 1rem;
+        position: relative;
+        z-index: 1;
     }
 
     .summary-box {
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.06);
-        border-radius: 18px;
-        padding: 18px;
-        margin-bottom: 18px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.04));
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 2px;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
     }
 
     .summary-label {
         color: #8fb8ff;
-        font-size: 0.82rem;
-        font-weight: 700;
-        margin-bottom: 4px;
+        font-size: 0.85rem;
+        font-weight: 800;
+        margin-bottom: 8px;
     }
 
     .summary-value {
         color: white;
         font-size: 1rem;
+        font-weight: 600;
+        line-height: 1.5;
     }
 
     .amount-box {
-        background: rgba(25, 195, 125, 0.12);
-        border: 1px solid rgba(125, 255, 191, 0.18);
-        border-radius: 18px;
-        padding: 18px;
-        margin-bottom: 24px;
+        background: linear-gradient(135deg, rgba(25,195,125,0.16), rgba(88,240,179,0.08));
+        border: 1px solid rgba(125,255,191,0.18);
+        border-radius: 22px;
+        padding: 22px;
+        margin: 28px 0 26px;
+        box-shadow: 0 12px 28px rgba(25,195,125,0.08);
     }
 
     .amount-title {
-        color: #bfead5;
-        font-size: 0.9rem;
-        font-weight: 700;
-        margin-bottom: 6px;
+        color: #c4f0db;
+        font-size: 0.94rem;
+        font-weight: 800;
+        margin-bottom: 10px;
     }
 
     .amount-value {
         color: #7dffbf;
-        font-size: 2rem;
+        font-size: 2.5rem;
         font-weight: 800;
+        line-height: 1;
+        letter-spacing: -0.03em;
     }
 
     .payment-method-box {
-        margin-bottom: 24px;
+        margin-bottom: 26px;
     }
 
-    .form-check {
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.06);
-        border-radius: 14px;
-        padding: 14px 16px;
-        margin-bottom: 12px;
+    .payment-method-title {
+        color: #8fb8ff;
+        font-size: 0.92rem;
+        font-weight: 800;
+        margin-bottom: 14px;
     }
 
-    .form-check-label {
+    .payment-option {
+        position: relative;
+        display: block;
+        background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.04));
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 18px;
+        padding: 16px 18px;
+        margin-bottom: 14px;
+        transition: all 0.26s ease;
+        cursor: pointer;
+    }
+
+    .payment-option:hover {
+        border-color: rgba(88,240,179,0.16);
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.16);
+    }
+
+    .payment-option input {
+        accent-color: #19c37d;
+        transform: scale(1.15);
+        margin-right: 12px;
+    }
+
+    .payment-option label {
         color: white;
-        font-weight: 600;
-        margin-left: 8px;
+        font-weight: 700;
+        font-size: 1.03rem;
+        cursor: pointer;
     }
 
     .pay-btn {
         width: 100%;
         border: none;
-        border-radius: 14px;
-        padding: 14px 16px;
+        border-radius: 18px;
+        padding: 16px;
         font-weight: 800;
         background: linear-gradient(90deg, #19c37d, #12a66a);
         color: white;
         font-size: 1rem;
+        box-shadow: 0 16px 28px rgba(25,195,125,0.22);
+        transition: 0.28s ease;
     }
 
     .pay-btn:hover {
         background: linear-gradient(90deg, #18b172, #108e5c);
+        transform: translateY(-2px);
+        box-shadow: 0 20px 34px rgba(25,195,125,0.28);
+    }
+
+    @media (max-width: 768px) {
+        .payment-card {
+            padding: 22px 18px;
+            border-radius: 24px;
+        }
+
+        .payment-title {
+            font-size: 2rem;
+        }
+
+        .amount-value {
+            font-size: 2rem;
+        }
     }
 </style>
 
 <section class="payment-section">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-lg-8">
+            <div class="col-lg-9 col-xl-8">
                 <div class="payment-card">
                     <h2 class="payment-title">Complete Payment</h2>
                     <p class="payment-subtitle">Review your booking details and choose a payment method.</p>
@@ -149,7 +221,7 @@
                         <div class="col-md-6">
                             <div class="summary-box">
                                 <div class="summary-label">Vehicle Number</div>
-                                <div class="summary-value">{{ pending_booking.vehicle_number|default:"Not Provided" }}</div>
+                                <div class="summary-value">{{ pending_booking.vehicle_number|default:'Not Provided' }}</div>
                             </div>
                         </div>
                     </div>
@@ -163,26 +235,31 @@
                         {% csrf_token %}
 
                         <div class="payment-method-box">
-                            <div class="summary-label mb-2">Choose Payment Method</div>
+                            <div class="payment-method-title">Choose Payment Method</div>
 
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="payment_method" value="UPI" id="upi">
-                                <label class="form-check-label" for="upi">UPI</label>
+                            <div class="payment-option">
+                                <input class="form-check-input" type="radio" name="payment_method" value="UPI" id="upi" />
+                                <label for="upi">UPI</label>
                             </div>
 
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="payment_method" value="Card" id="card">
-                                <label class="form-check-label" for="card">Credit / Debit Card</label>
+                            <div class="payment-option">
+                                <input class="form-check-input" type="radio" name="payment_method" value="Card" id="card" />
+                                <label for="card">Credit / Debit Card</label>
                             </div>
 
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="payment_method" value="Wallet" id="wallet">
-                                <label class="form-check-label" for="wallet">Wallet</label>
+                            <div class="payment-option">
+                                <input class="form-check-input" type="radio" name="payment_method" value="Wallet" id="wallet" />
+                                <label for="wallet">Wallet</label>
                             </div>
 
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="payment_method" value="Net Banking" id="netbanking">
-                                <label class="form-check-label" for="netbanking">Net Banking</label>
+                            <div class="payment-option">
+                                <input class="form-check-input" type="radio" name="payment_method" value="Net Banking" id="netbanking" />
+                                <label for="netbanking">Net Banking</label>
+                            </div>
+
+                            <div class="payment-option">
+                                <input class="form-check-input" type="radio" name="payment_method" value="Pay at Station" id="payatstation" />
+                                <label for="payatstation">Pay at Station (Cash / Postpaid)</label>
                             </div>
                         </div>
 
@@ -193,5 +270,4 @@
         </div>
     </div>
 </section>
-
 {% endblock %}

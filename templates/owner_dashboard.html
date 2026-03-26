@@ -1,0 +1,278 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <style>
+    .owner-section {
+      padding: 60px 0 80px;
+      min-height: 80vh;
+    }
+    
+    .hero-panel {
+      background: linear-gradient(135deg, rgba(25, 195, 125, 0.12), rgba(88, 240, 179, 0.05), rgba(255, 255, 255, 0.04));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 28px;
+      padding: 30px;
+      margin-bottom: 34px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+    }
+    
+    .hero-badge {
+      display: inline-block;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: rgba(88, 240, 179, 0.12);
+      color: #7fffd4;
+      border: 1px solid rgba(127, 255, 212, 0.18);
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+    
+    .page-title {
+      font-size: 2.3rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    
+    .page-subtitle {
+      color: #cbd5e1;
+      margin-bottom: 0;
+    }
+    
+    .verify-box {
+      margin-top: 20px;
+      margin-bottom: 24px;
+    }
+    
+    .verify-form-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .verify-input {
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: none;
+      width: 250px;
+      outline: none;
+    }
+    
+    .verify-btn {
+      background: #58f0b3;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: bold;
+      color: #062b1d;
+    }
+    
+    .booking-table-box {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.06));
+      border-radius: 24px;
+      padding: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.18);
+    }
+    
+    .table {
+      color: white;
+      margin-bottom: 0;
+      background: transparent;
+    }
+    
+    .table thead th {
+      color: #8fb8ff;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 0.88rem;
+      background: transparent !important;
+    }
+    
+    .table td {
+      vertical-align: middle;
+      border-color: rgba(255, 255, 255, 0.08);
+      font-size: 0.93rem;
+      color: #e7eefb;
+      background: transparent !important;
+    }
+    
+    .table tbody tr {
+      background: transparent !important;
+    }
+    
+    .table tbody tr:hover {
+      background: rgba(255, 255, 255, 0.03) !important;
+    }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    
+    .status-booked {
+      background: rgba(25, 195, 125, 0.18);
+      color: #7dffbf;
+    }
+    
+    .status-cancelled {
+      background: rgba(255, 107, 107, 0.18);
+      color: #ff9d9d;
+    }
+    
+    .status-other {
+      background: rgba(79, 172, 254, 0.18);
+      color: #9fc0ff;
+    }
+    
+    .action-btn {
+      border: none;
+      border-radius: 10px;
+      padding: 8px 14px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    
+    .start-btn {
+      background: #58f0b3;
+      color: #062b1d;
+    }
+    
+    .complete-btn {
+      background: #4facfe;
+      color: white;
+    }
+    .scan-btn {
+      background: #f7c948;
+      color: #2b2100;
+    }
+    
+    .empty-box {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.05));
+      border-radius: 24px;
+      padding: 50px 24px;
+      text-align: center;
+      color: #dbe7ff;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .status-payment-prepaid {
+      background: rgba(25, 195, 125, 0.18);
+      color: #7dffbf;
+    }
+    
+    .status-payment-postpaid {
+      background: rgba(255, 193, 7, 0.18);
+      color: #ffe08a;
+    }
+  </style>
+
+  <section class="owner-section">
+    <div class="container">
+      <div class="hero-panel">
+        <span class="hero-badge">STATION OWNER PANEL</span>
+        <h2 class="page-title">{{ owner_station.name }}</h2>
+        <p class="page-subtitle">Manage bookings and verify users at your charging station.</p>
+      </div>
+
+      <div class="verify-box">
+        <form method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="verify" />
+          <div class="verify-form-row">
+            <input type="text" name="booking_id" placeholder="Enter Booking ID" class="verify-input" />
+            <button type="submit" class="verify-btn">Verify User</button>
+          </div>
+        </form>
+      </div>
+
+      {% if station_bookings %}
+        <div class="booking-table-box table-responsive">
+          <table class="table align-middle">
+            <thead>
+              <tr>
+                <th>Booking ID</th>
+                <th>User</th>
+                <th>Phone</th>
+                <th>Date</th>
+                <th>Time Slot</th>
+                <th>Vehicle</th>
+                <th>Status</th>
+                <th>Payment</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for booking in station_bookings %}
+                {% if booking.booking_id %}
+                  <tr>
+                    <td>{{ booking.booking_id }}</td>
+                    <td>{{ booking.full_name }}</td>
+                    <td>{{ booking.phone_number }}</td>
+                    <td>{{ booking.booking_date }}</td>
+                    <td>{{ booking.time_slot }}</td>
+                    <td>{{ booking.vehicle_number|default:'Not Provided' }}</td>
+
+                    <td>
+                      {% if booking.status == 'Booked' %}
+                        <span class="status-badge status-booked">{{ booking.status }}</span>
+                      {% elif booking.status == 'Cancelled' %}
+                        <span class="status-badge status-cancelled">{{ booking.status }}</span>
+                      {% else %}
+                        <span class="status-badge status-other">{{ booking.status }}</span>
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% if booking.payment_status == 'Prepaid' %}
+                        <span class="status-badge status-booked">Prepaid</span>
+                      {% else %}
+                        <span class="status-badge status-other">Postpaid</span>
+                      {% endif %}
+                    </td>
+
+                    <td>
+                      {% if booking.status == 'Booked' %}
+                        <form method="POST" style="margin: 0;">
+                          {% csrf_token %}
+                          <input type="hidden" name="booking_id" value="{{ booking.booking_id }}" />
+                          <input type="hidden" name="action" value="scan_qr" />
+                          <button type="submit" class="action-btn scan-btn">Scan QR</button>
+                        </form>
+                      {% elif booking.status == 'Verified' %}
+                        <form method="POST" style="margin: 0;">
+                          {% csrf_token %}
+                          <input type="hidden" name="booking_id" value="{{ booking.booking_id }}" />
+                          <input type="hidden" name="action" value="start_charging" />
+                          <button type="submit" class="action-btn start-btn">Start Charging</button>
+                        </form>
+                      {% elif booking.status == 'Charging' %}
+                        <form method="POST" style="margin: 0;">
+                          {% csrf_token %}
+                          <input type="hidden" name="booking_id" value="{{ booking.booking_id }}" />
+                          <input type="hidden" name="action" value="complete_charging" />
+                          <button type="submit" class="action-btn complete-btn">Complete Charging</button>
+                        </form>
+                      {% else %}
+                        <span style="color: #9fb3d9;">--</span>
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="empty-box">
+          <h4>No bookings found</h4>
+          <p>No user bookings available for this station yet.</p>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+{% endblock %}

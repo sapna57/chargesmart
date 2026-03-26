@@ -6,6 +6,9 @@ from stations.models import Station
 class Booking(models.Model):
     STATUS_CHOICES = [
         ('Booked', 'Booked'),
+        ('Verified', 'Verified'),
+        ('Charging', 'Charging'),
+        ('Completed', 'Completed'),
         ('Cancelled', 'Cancelled'),
     ]
 
@@ -25,8 +28,15 @@ class Booking(models.Model):
         ('4 Wheeler', '4 Wheeler'),
     ]
 
+    PAYMENT_STATUS_CHOICES = [
+        ('Prepaid', 'Prepaid'),
+        ('Postpaid', 'Postpaid'),
+    ]
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     station = models.ForeignKey(Station, on_delete=models.CASCADE)
+
+    booking_id = models.CharField(max_length=30, unique=True, blank=True, null=True)
 
     full_name = models.CharField(max_length=150)
     email = models.EmailField()
@@ -40,6 +50,17 @@ class Booking(models.Model):
 
     booking_time = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Booked')
+
+    payment_method = models.CharField(max_length=50, blank=True, null=True)
+    payment_status = models.CharField(
+        max_length=20,
+        choices=PAYMENT_STATUS_CHOICES,
+        default='Prepaid'
+    )
+
+    verified_at = models.DateTimeField(blank=True, null=True)
+    charging_started_at = models.DateTimeField(blank=True, null=True)
+    completed_at = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.full_name} - {self.station.name} - {self.status}"

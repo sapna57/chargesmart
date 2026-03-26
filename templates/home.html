@@ -1,199 +1,500 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
-<style>
-    .hero-section {
-        min-height: calc(100vh - 140px);
-        display: flex;
-        align-items: center;
-        padding: 30px 0 20px;
-    }
-
-    .hero-badge {
-        display: inline-block;
-        padding: 8px 16px;
-        border-radius: 999px;
-        background: rgba(0, 255, 170, 0.12);
-        color: #7fffd4;
-        font-size: 0.9rem;
-        font-weight: 600;
-        margin-bottom: 20px;
-        border: 1px solid rgba(127, 255, 212, 0.2);
-    }
-
-    .hero-title {
-        font-size: 3rem;
-        font-weight: 800;
-        margin-bottom: 20px;
-        line-height: 1.15;
-    }
-
-    .hero-title span {
-        color: #58f0b3;
-    }
-
-    .hero-text {
-        color: #d0d9ea;
-        margin-bottom: 30px;
-        font-size: 1.05rem;
-        line-height: 1.7;
-    }
-
-    .btn-main {
-        background: linear-gradient(90deg, #19c37d, #12a66a);
-        color: white;
-        border-radius: 10px;
-        padding: 10px 20px;
-        border: none;
-        margin-right: 10px;
-    }
-
-    .btn-outline-custom {
-        border: 1px solid rgba(255,255,255,0.3);
-        color: white;
-        padding: 10px 20px;
-        border-radius: 10px;
-        text-decoration: none;
-    }
-
-    .hero-card {
-        background: rgba(255,255,255,0.08);
-        border-radius: 20px;
-        padding: 20px;
-        border: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .station-box {
-        background: rgba(255,255,255,0.05);
-        padding: 15px;
-        border-radius: 15px;
-        margin-bottom: 10px;
-    }
-
-    .status {
-        font-size: 0.8rem;
-        padding: 5px 10px;
-        border-radius: 20px;
-        display: inline-block;
-    }
-
-    .available {
-        background: rgba(0,255,100,0.2);
-    }
-
-    .busy {
-        background: rgba(255,200,0,0.2);
-    }
-
-    .stats-row {
-        margin-top: 30px;
-    }
-
-    .stats-card h3,
-    .stats-card p {
-        margin: 0;
-    }
-
-    .stats-card h3 {
-        font-size: 2rem;
-        font-weight: 800;
-        margin-bottom: 8px;
-    }
-
-    .stats-card p {
-        color: #d0d9ea;
-    }
-
-    @media (max-width: 991px) {
-        .hero-section {
-            min-height: auto;
-            padding: 30px 0 10px;
-        }
-
-        .hero-title {
-            font-size: 2.4rem;
-        }
-
-        .hero-card {
-            margin-top: 30px;
-        }
-    }
-</style>
-
-<section class="hero-section">
-    <div class="container">
-        <div class="row align-items-center g-4">
-
-            <div class="col-lg-6">
-                <div class="hero-badge">Smart EV Charging Management Platform</div>
-
-                <h1 class="hero-title">
-                    Power your journey with <span>smart EV charging</span>
-                </h1>
-
-                <p class="hero-text">
-                    ChargeSmart helps users discover EV charging stations, check slot availability,
-                    book charging sessions, and manage bookings with a smooth and professional experience.
-                </p>
-
-                <a href="{% url 'stations' %}" class="btn btn-main">Explore Stations</a>
-                <a href="{% url 'stations' %}" class="btn btn-outline-custom">Book Your Slot</a>
-
-                <div class="row stats-row g-3">
-                    <div class="col-md-4">
-                        <div class="hero-card stats-card text-center">
-                            <h3>150+</h3>
-                            <p>Charging Points</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="hero-card stats-card text-center">
-                            <h3>24/7</h3>
-                            <p>Availability</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="hero-card stats-card text-center">
-                            <h3>100%</h3>
-                            <p>Digital Booking</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-6">
-                <div class="hero-card">
-                    <h5 class="mb-3">Nearby Charging Stations</h5>
-
-                    <div class="station-box">
-                        <b>ChargeSmart Hub – Bengaluru</b><br>
-                        Fast DC Charging • ₹18/kWh • 12 Slots<br>
-                        <span class="status available">8 Slots Available</span>
-                    </div>
-
-                    <div class="station-box">
-                        <b>GreenVolt Station – Hyderabad</b><br>
-                        AC + DC Charging • ₹16/kWh • 10 Slots<br>
-                        <span class="status busy">Limited Slots</span>
-                    </div>
-
-                    <div class="station-box">
-                        <b>EcoCharge Point – Pune</b><br>
-                        Fast Charging • ₹20/kWh • 14 Slots<br>
-                        <span class="status available">11 Slots Available</span>
-                    </div>
-
-                    <div class="station-box">
-                        <b>Urban EV Connect – Mumbai</b><br>
-                        Premium Station • ₹22/kWh • 16 Slots<br>
-                        <span class="status available">6 Slots Available</span>
-                    </div>
-                </div>
-            </div>
-
+<div id="preloader">
+    <div class="preloader-content">
+        <div class="preloader-logo">ChargeSmart</div>
+        <div class="preloader-tagline">Powering Smart EV Charging</div>
+        <div class="preloader-loader">
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
     </div>
-</section>
+</div>
+  
 
+  <style>
+    .home-shell {
+      padding: 34px 0 44px;
+    }
+    
+    .hero-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 34px;
+      padding: 42px 34px;
+      background: linear-gradient(135deg, rgba(8, 34, 54, 0.92), rgba(18, 42, 78, 0.86)), radial-gradient(circle at top left, rgba(88, 240, 179, 0.12), transparent 28%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.24);
+    }
+    
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(88, 240, 179, 0.14), transparent 70%);
+    }
+    
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: rgba(88, 240, 179, 0.1);
+      border: 1px solid rgba(88, 240, 179, 0.18);
+      color: #7fffd4;
+      font-size: 0.92rem;
+      font-weight: 800;
+      margin-bottom: 22px;
+    }
+    
+    .hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 4.35rem;
+      line-height: 1.03;
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      margin-bottom: 20px;
+      color: #ffffff;
+      max-width: 760px;
+    }
+    
+    .hero-title .gradient-text {
+      background: linear-gradient(90deg, #7fffd4, #58f0b3, #9bd0ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero-text {
+      max-width: 760px;
+      color: #dce6f8;
+      font-size: 1.28rem;
+      line-height: 1.72;
+      margin-bottom: 26px;
+    }
+    
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+    }
+    
+    .hero-btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      padding: 15px 24px;
+      border-radius: 16px;
+      background: linear-gradient(90deg, #19c37d, #12a66a);
+      color: white;
+      font-weight: 800;
+      font-size: 1.02rem;
+      border: none;
+      box-shadow: 0 14px 24px rgba(25, 195, 125, 0.2);
+      transition: 0.28s ease;
+    }
+    
+    .hero-btn-primary:hover {
+      transform: translateY(-2px);
+      color: white;
+      box-shadow: 0 18px 30px rgba(25, 195, 125, 0.26);
+    }
+    
+    .hero-btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      padding: 15px 24px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      color: #f4f8ff;
+      font-weight: 800;
+      font-size: 1.02rem;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      transition: 0.28s ease;
+    }
+    
+    .hero-btn-secondary:hover {
+      transform: translateY(-2px);
+      color: #7fffd4;
+      border-color: rgba(88, 240, 179, 0.22);
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .hero-visual {
+      position: relative;
+      min-height: 520px;
+      border-radius: 30px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.24);
+      background: linear-gradient(180deg, rgba(8, 17, 32, 0.1), rgba(8, 17, 32, 0.28));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 22px 22px 74px;
+    }
+    
+    .image-only-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: radial-gradient(circle at top right, rgba(88, 240, 179, 0.12), transparent 26%), linear-gradient(180deg, rgba(9, 18, 34, 0.04), rgba(9, 18, 34, 0.18));
+      pointer-events: none;
+    }
+    
+    .hero-visual-img {
+      position: relative;
+      z-index: 0;
+      width: 100%;
+      max-width: 100%%;
+      max-height: 520px;
+      object-fit: contain;
+      border-radius: 24px;
+      display: block;
+      filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.28));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22);
+    }
+    
+    .image-badge {
+      position: absolute;
+      left: 24px;
+      bottom: 24px;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: rgba(10, 25, 46, 0.68);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #aefee2;
+      font-size: 0.95rem;
+      font-weight: 800;
+      box-shadow: 0 16px 30px rgba(0, 0, 0, 0.24);
+    }
+    
+    .feature-grid {
+      margin-top: 28px;
+    }
+    
+    .feature-card {
+      height: 100%;
+      border-radius: 28px;
+      padding: 28px 24px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 18px 34px rgba(0, 0, 0, 0.18);
+      transition: 0.28s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(88, 240, 179, 0.14), transparent 70%);
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(88, 240, 179, 0.18);
+      box-shadow: 0 22px 40px rgba(0, 0, 0, 0.24);
+    }
+    
+    .feature-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #7fffd4;
+      background: rgba(88, 240, 179, 0.1);
+      border: 1px solid rgba(88, 240, 179, 0.16);
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .feature-title {
+      font-size: 1.32rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .feature-text {
+      color: #dce6f8;
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 0;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .journey-card {
+      margin-top: 28px;
+      border-radius: 32px;
+      padding: 30px;
+      background: linear-gradient(135deg, rgba(14, 27, 52, 0.96), rgba(20, 41, 78, 0.9)), radial-gradient(circle at top right, rgba(88, 240, 179, 0.1), transparent 28%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 36px rgba(0, 0, 0, 0.18);
+    }
+    
+    .journey-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    
+    .journey-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 0;
+    }
+    
+    .journey-subtitle {
+      color: #cfdcf2;
+      font-size: 0.98rem;
+      margin-top: 8px;
+    }
+    
+    .journey-badge {
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(88, 240, 179, 0.1);
+      color: #7fffd4;
+      border: 1px solid rgba(88, 240, 179, 0.16);
+      font-size: 0.84rem;
+      font-weight: 800;
+    }
+    
+    .journey-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+    
+    .journey-step {
+      border-radius: 24px;
+      padding: 22px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      height: 100%;
+    }
+    
+    .journey-step-no {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: rgba(88, 240, 179, 0.12);
+      color: #7fffd4;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+    
+    .journey-step-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    
+    .journey-step-text {
+      color: #dce6f8;
+      line-height: 1.65;
+      margin-bottom: 0;
+    }
+    
+    @media (max-width: 1399px) {
+      .hero-title {
+        font-size: 3.6rem;
+      }
+    }
+    
+    @media (max-width: 1199px) {
+      .hero-title {
+        font-size: 3.15rem;
+      }
+    
+      .hero-visual {
+        min-height: 420px;
+        margin-top: 24px;
+      }
+    }
+    
+    @media (max-width: 991px) {
+      .home-shell {
+        padding: 22px 0 34px;
+      }
+    
+      .hero-card {
+        padding: 28px 22px;
+      }
+    
+      .hero-title {
+        font-size: 2.6rem;
+      }
+    
+      .hero-text {
+        font-size: 1.08rem;
+      }
+    
+      .journey-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    @media (max-width: 575px) {
+      .hero-title {
+        font-size: 2.15rem;
+      }
+    
+      .hero-actions {
+        flex-direction: column;
+      }
+    
+      .hero-btn-primary,
+      .hero-btn-secondary {
+        width: 100%;
+        justify-content: center;
+      }
+    
+      .image-badge {
+        left: 14px;
+        right: 14px;
+        bottom: 14px;
+        justify-content: center;
+        text-align: center;
+      }
+    }
+  </style>
+  <section class="home-shell">
+    <div class="container-fluid px-3 px-lg-4">
+      <div class="hero-card">
+        <div class="row g-4 align-items-center">
+          <!-- LEFT SIDE -->
+          <div class="col-xl-7">
+            <div class="hero-badge">⚡ Smart EV Charging Management Platform</div>
+
+            <h1 class="hero-title">
+              Power your journey with
+              <span class="gradient-text">smart EV charging</span>
+            </h1>
+
+            <p class="hero-text">ChargeSmart helps users discover EV charging stations, check slot availability, reserve charging sessions, and manage bookings through a premium digital experience designed for speed, clarity, and reliability.</p>
+
+            <div class="hero-actions">
+              <a href="{% url 'stations' %}" class="hero-btn-primary">⚡ Explore Stations</a>
+              <a href="{% url 'stations' %}" class="hero-btn-secondary">📍 Book Your Slot</a>
+            </div>
+
+            <div class="row feature-grid g-4">
+              <div class="col-md-4">
+                <div class="feature-card">
+                  <div class="feature-icon">🔎</div>
+                  <h3 class="feature-title">Smart Discovery</h3>
+                  <p class="feature-text">Browse charging stations with a clean and guided experience designed for quick selection.</p>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="feature-card">
+                  <div class="feature-icon">⚡</div>
+                  <h3 class="feature-title">Fast Booking Flow</h3>
+                  <p class="feature-text">Reserve your preferred station slot through a smooth, simple and user-friendly booking flow.</p>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="feature-card">
+                  <div class="feature-icon">🛡</div>
+                  <h3 class="feature-title">Role-Based Access</h3>
+                  <p class="feature-text">Separate user, owner, and admin experiences create an organized and secure platform workflow.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT SIDE -->
+          <div class="col-xl-5">
+            <div class="hero-visual image-only-visual">
+              <img src="{% static 'images/hero-ev.jpeg' %}" alt="Premium EV Charging" class="hero-visual-img" />
+              <div class="image-badge">⚡ Premium EV Charging Experience</div>
+            </div>
+          </div>
+        </div> <!-- ✅ CLOSE ROW -->
+      </div> <!-- ✅ CLOSE HERO CARD -->
+
+      <!-- JOURNEY SECTION -->
+      <div class="journey-card">
+        <div class="journey-header">
+          <div>
+            <h2 class="journey-title">How ChargeSmart Works</h2>
+            <div class="journey-subtitle">A clean digital workflow for users to discover, reserve, and access EV charging stations efficiently.</div>
+          </div>
+
+          <span class="journey-badge">User Journey</span>
+        </div>
+
+        <div class="journey-grid">
+          <div class="journey-step">
+            <div class="journey-step-no">1</div>
+            <div class="journey-step-title">Discover Stations</div>
+            <p class="journey-step-text">Explore charging stations, review availability, and identify the most suitable option for your route.</p>
+          </div>
+
+          <div class="journey-step">
+            <div class="journey-step-no">2</div>
+            <div class="journey-step-title">Reserve Your Slot</div>
+            <p class="journey-step-text">Choose a preferred slot, complete the booking process, and secure your charging session in advance.</p>
+          </div>
+
+          <div class="journey-step">
+            <div class="journey-step-no">3</div>
+            <div class="journey-step-title">Charge with Confidence</div>
+            <p class="journey-step-text">Reach the station, verify the booking flow, and enjoy a streamlined charging experience through ChargeSmart.</p>
+          </div>
+        </div>
+      </div>
+    </div> <!-- ✅ CLOSE CONTAINER -->
+  </section>
+  <script>
+    window.addEventListener('load', function () {
+        const preloader = document.getElementById('preloader');
+
+        setTimeout(function () {
+            preloader.classList.add('hidden');
+        }, 2000);
+    });
+</script>
 {% endblock %}

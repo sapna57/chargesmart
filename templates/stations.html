@@ -311,6 +311,16 @@
         margin-bottom: 0;
     }
 
+    .charger-type-list {
+        margin: 0;
+        padding-left: 18px;
+    }
+
+    .charger-type-list li {
+        color: #e7eefb;
+        margin-bottom: 4px;
+    }
+
     @media (max-width: 768px) {
         .page-title {
             font-size: 2rem;
@@ -414,8 +424,14 @@
 
                             <div class="info-grid">
                                 <div class="info-box">
-                                    <div class="info-label">Charger Type</div>
-                                    <div class="info-value">{{ station.charger_type }}</div>
+                                    <div class="info-label">Charger Types</div>
+                                    <div class="info-value">
+                                        <ul class="charger-type-list">
+                                            {% for type in station.charger_type_list %}
+                                                <li>{{ type }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
                                 </div>
 
                                 <div class="info-box">

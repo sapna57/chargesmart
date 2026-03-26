@@ -1,15 +1,20 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#081120">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#081120" />
     <title>ChargeSmart</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
 
     <style>
-        html, body {
+        html,
+        body {
             margin: 0;
             padding: 0;
             min-height: 100%;
@@ -20,58 +25,254 @@
 
         body {
             color: white;
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
             overflow-x: hidden;
-            background: linear-gradient(135deg, #081120, #0f1f3d, #12284d);
+            background:
+                radial-gradient(circle at top left, rgba(88, 240, 179, 0.08), transparent 22%),
+                radial-gradient(circle at top right, rgba(143, 184, 255, 0.08), transparent 20%),
+                linear-gradient(135deg, #081120, #0f1f3d, #12284d);
         }
 
         .site-wrapper {
             min-height: 100vh;
+        }
+
+        .layout-shell {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .sidebar {
+            width: 282px;
+            min-height: 100vh;
+            background:
+                linear-gradient(180deg, rgba(7, 16, 31, 0.98), rgba(10, 22, 43, 0.96)),
+                radial-gradient(circle at top left, rgba(88, 240, 179, 0.10), transparent 36%);
+            backdrop-filter: blur(18px);
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 22px 16px 18px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1050;
+            transform: translateX(0);
+            transition: transform 0.32s ease, box-shadow 0.32s ease;
+            box-shadow: 0 0 34px rgba(0, 0, 0, 0.24);
+        }
+
+        .sidebar.closed {
+            transform: translateX(-100%);
+        }
+
+        .sidebar-brand {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.15rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            margin: 4px 8px 18px;
+            background: linear-gradient(90deg, #7fffd4, #58f0b3, #8fb8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 18px rgba(88, 240, 179, 0.18);
+        }
+
+        .sidebar-role {
+            color: #d8e4fb;
+            font-size: 1rem;
+            line-height: 1.5;
+            margin: 0 6px 18px;
+            padding: 14px 16px;
+            border-radius: 18px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.03));
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+        }
+
+        .sidebar-divider {
+            border: 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+            margin: 18px 8px;
+        }
+
+        .sidebar-label {
+            color: #8fb8ff;
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            margin: 0 12px 12px;
+            text-transform: uppercase;
+        }
+
+        .sidebar-menu {
             display: flex;
             flex-direction: column;
-            background: linear-gradient(135deg, #081120, #0f1f3d, #12284d);
+            gap: 6px;
+            margin: 0 4px;
+        }
+
+        .sidebar-link {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #e7eefc;
+            text-decoration: none;
+            padding: 14px 16px;
+            border-radius: 18px;
+            transition: all 0.28s ease;
+            font-size: 1.08rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            overflow: hidden;
+            border: 1px solid transparent;
+        }
+
+        .sidebar-link::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, rgba(88, 240, 179, 0.12), rgba(143, 184, 255, 0.08));
+            opacity: 0;
+            transition: opacity 0.28s ease;
+            border-radius: 18px;
+        }
+
+        .sidebar-link:hover::before {
+            opacity: 1;
+        }
+
+        .sidebar-link:hover {
+            color: #7fffd4;
+            border-color: rgba(88, 240, 179, 0.16);
+            transform: translateX(4px);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+        }
+
+        .sidebar-link span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .sidebar-icon {
+            width: 22px;
+            text-align: center;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .content-shell {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            margin-left: 282px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .content-shell.full-width {
+            margin-left: 0;
+        }
+
+        .topbar {
+            background:
+                linear-gradient(90deg, rgba(16, 30, 56, 0.94), rgba(12, 28, 52, 0.88)),
+                radial-gradient(circle at right, rgba(88, 240, 179, 0.08), transparent 30%);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .topbar-inner {
+            padding: 16px 26px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .topbar-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.72rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            background: linear-gradient(90deg, #ffffff, #dce8ff, #8fb8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .topbar-user {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 18px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, rgba(88, 240, 179, 0.12), rgba(143, 184, 255, 0.08));
+            border: 1px solid rgba(88, 240, 179, 0.14);
+            color: #aefee2;
+            font-size: 1.02rem;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .topbar-user-badge {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #58f0b3;
+            box-shadow: 0 0 12px rgba(88, 240, 179, 0.65);
+        }
+
+        .menu-toggle-btn {
+            background: linear-gradient(135deg, rgba(88, 240, 179, 0.14), rgba(143, 184, 255, 0.1));
+            border: 1px solid rgba(88, 240, 179, 0.18);
+            color: #7fffd4;
+            border-radius: 16px;
+            padding: 10px 14px;
+            font-size: 1.15rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.28s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.14);
+        }
+
+        .menu-toggle-btn:hover {
+            transform: translateY(-1px) scale(1.03);
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, rgba(88, 240, 179, 0.22), rgba(143, 184, 255, 0.14));
         }
 
         .main-content {
             flex: 1;
         }
 
-        .navbar {
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-        }
-
-        .navbar-brand {
-            font-weight: bold;
-            color: white !important;
-            font-size: 1.5rem;
-        }
-
-        .nav-link {
-            color: #dbe7ff !important;
-            margin-left: 10px;
-            font-size: 1.05rem;
-        }
-
-        .nav-link:hover {
-            color: #58f0b3 !important;
-        }
-
-        .welcome-text {
-            color: #58f0b3;
-            margin-left: 16px;
-            display: flex;
-            align-items: center;
-            font-weight: 600;
+        .page-area {
+            flex: 1;
         }
 
         footer {
-            border-top: 1px solid rgba(255,255,255,0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
             padding: 20px 0;
             text-align: center;
             color: #b6c3d9;
-            background: rgba(0,0,0,0.12);
+            background: rgba(0, 0, 0, 0.12);
             margin-top: 0;
         }
 
@@ -80,79 +281,336 @@
             color: white;
             border: none;
             padding: 10px 20px;
-            border-radius: 10px;
+            border-radius: 12px;
         }
 
         .btn-main:hover {
             background: linear-gradient(90deg, #18b172, #108e5c);
             color: white;
         }
-        .custom-alert {
-    background: linear-gradient(90deg, rgba(25,195,125,0.2), rgba(25,195,125,0.1));
-    border: 1px solid rgba(25,195,125,0.4);
-    color: #7dffbf;
-    border-radius: 12px;
-    font-weight: 600;
-}
 
-.alert-icon {
-    margin-right: 8px;
-    font-weight: bold;
-}
+        .alert-icon {
+            margin-right: 8px;
+            font-weight: bold;
+        }
+
+        .custom-alert {
+            border-radius: 14px;
+            font-weight: 600;
+            backdrop-filter: blur(8px);
+        }
+
+        .alert-success.custom-alert {
+            background: linear-gradient(90deg, rgba(25, 195, 125, 0.2), rgba(25, 195, 125, 0.1));
+            border: 1px solid rgba(25, 195, 125, 0.4);
+            color: #7dffbf;
+        }
+
+        .alert-danger.custom-alert {
+            background: linear-gradient(90deg, rgba(255, 0, 0, 0.15), rgba(255, 0, 0, 0.08));
+            border: 1px solid rgba(255, 0, 0, 0.4);
+            color: #ff9b9b;
+        }
+
+        .alert-warning.custom-alert {
+            background: linear-gradient(90deg, rgba(255, 193, 7, 0.2), rgba(255, 193, 7, 0.1));
+            border: 1px solid rgba(255, 193, 7, 0.4);
+            color: #ffe08a;
+        }
+
+        .alert-info.custom-alert {
+            background: linear-gradient(90deg, rgba(0, 123, 255, 0.2), rgba(0, 123, 255, 0.1));
+            border: 1px solid rgba(0, 123, 255, 0.4);
+            color: #9ecbff;
+        }
+
+        .custom-alert .btn-close {
+            filter: invert(1);
+            opacity: 0.8;
+        }
+
+        .custom-alert .btn-close:hover {
+            opacity: 1;
+        }
+
+        #preloader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background:
+                radial-gradient(circle at top left, rgba(88, 240, 179, 0.1), transparent 28%),
+                radial-gradient(circle at top right, rgba(143, 184, 255, 0.1), transparent 24%),
+                linear-gradient(135deg, #07111f, #0a1d37, #10284c);
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        #preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .preloader-content {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .preloader-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            background: linear-gradient(90deg, #7fffd4, #58f0b3, #8fb8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 14px;
+            text-shadow: 0 0 20px rgba(88, 240, 179, 0.18);
+            animation: pulseGlow 1.8s ease-in-out infinite;
+        }
+
+        .preloader-tagline {
+            color: #cfe3ff;
+            font-size: 1.05rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            margin-bottom: 28px;
+        }
+
+        .preloader-loader {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .preloader-loader span {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: linear-gradient(90deg, #58f0b3, #8fb8ff);
+            box-shadow: 0 0 16px rgba(88, 240, 179, 0.35);
+            animation: bounceDots 0.9s infinite ease-in-out;
+        }
+
+        .preloader-loader span:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .preloader-loader span:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes bounceDots {
+            0%, 80%, 100% {
+                transform: translateY(0);
+                opacity: 0.55;
+            }
+            40% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 0 rgba(88, 240, 179, 0));
+            }
+            50% {
+                transform: scale(1.02);
+                filter: drop-shadow(0 0 18px rgba(88, 240, 179, 0.18));
+            }
+        }
+
+        @media (max-width: 991px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 282px;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .content-shell {
+                margin-left: 0;
+            }
+
+            .topbar-title {
+                font-size: 1.35rem;
+            }
+
+            .topbar-user {
+                font-size: 0.95rem;
+                padding: 8px 14px;
+            }
+        }
     </style>
 </head>
 
 <body>
-<div class="site-wrapper">
+    
 
-    <nav class="navbar navbar-expand-lg">
-        <div class="container py-2">
-            <a class="navbar-brand" href="{% url 'home' %}">ChargeSmart</a>
+    <div class="site-wrapper layout-shell">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">ChargeSmart</div>
 
-            <div class="navbar-nav ms-auto align-items-center">
-                <a class="nav-link" href="{% url 'home' %}">Home</a>
-                <a class="nav-link" href="{% url 'stations' %}">Stations</a>
-
-                {% if user.is_authenticated %}
-                    <a class="nav-link" href="{% url 'my_bookings' %}">My Bookings</a>
-
+            {% if user.is_authenticated %}
+                <div class="sidebar-role">
+                    Logged in as:
                     {% if user.is_superuser %}
-                        <a class="nav-link" href="{% url 'admin_dashboard' %}">Admin Dashboard</a>
+                        Admin
+                    {% elif user.stationowner %}
+                        Station Owner
+                    {% else %}
+                        User
                     {% endif %}
+                </div>
 
-                    <span class="welcome-text">Welcome, {{ user.username }}</span>
-                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                <hr class="sidebar-divider" />
+
+                {% if user.is_superuser %}
+                    <div class="sidebar-label">Admin Panel</div>
+                    <div class="sidebar-menu">
+                        <a href="{% url 'admin_dashboard' %}" class="sidebar-link">
+                            <span class="sidebar-icon">🛠</span>
+                            <span>Admin Dashboard</span>
+                        </a>
+                    </div>
+                    <hr class="sidebar-divider" />
+                    <div class="sidebar-menu">
+                        <a href="{% url 'logout' %}" class="sidebar-link">
+                            <span class="sidebar-icon">↩</span>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+
+                {% elif user.stationowner %}
+                    <div class="sidebar-label">Owner Panel</div>
+                    <div class="sidebar-menu">
+                        <a href="{% url 'owner_dashboard' %}" class="sidebar-link">
+                            <span class="sidebar-icon">📊</span>
+                            <span>Owner Dashboard</span>
+                        </a>
+                    </div>
+                    <hr class="sidebar-divider" />
+                    <div class="sidebar-menu">
+                        <a href="{% url 'logout' %}" class="sidebar-link">
+                            <span class="sidebar-icon">↩</span>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+
                 {% else %}
-                    <a class="nav-link" href="{% url 'login' %}">Login</a>
-                    <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    <div class="sidebar-label">Main Menu</div>
+                    <div class="sidebar-menu">
+                        <a href="{% url 'home' %}" class="sidebar-link">
+                            <span class="sidebar-icon">🏠</span>
+                            <span>Home</span>
+                        </a>
+                        <a href="{% url 'stations' %}" class="sidebar-link">
+                            <span class="sidebar-icon">⚡</span>
+                            <span>Stations</span>
+                        </a>
+                        <a href="{% url 'my_bookings' %}" class="sidebar-link">
+                            <span class="sidebar-icon">📖</span>
+                            <span>My Bookings</span>
+                        </a>
+                    </div>
+                    <hr class="sidebar-divider" />
+                    <div class="sidebar-menu">
+                        <a href="{% url 'logout' %}" class="sidebar-link">
+                            <span class="sidebar-icon">↩</span>
+                            <span>Logout</span>
+                        </a>
+                    </div>
                 {% endif %}
+            {% else %}
+                <div class="sidebar-label">Account</div>
+                <div class="sidebar-menu">
+                    <a href="{% url 'login' %}" class="sidebar-link">
+                        <span class="sidebar-icon">🔐</span>
+                        <span>Login</span>
+                    </a>
+                    <a href="{% url 'register' %}" class="sidebar-link">
+                        <span class="sidebar-icon">📝</span>
+                        <span>Register</span>
+                    </a>
+                </div>
+            {% endif %}
+        </aside>
+
+        <div class="content-shell" id="contentShell">
+            <div class="topbar">
+                <div class="topbar-inner">
+                    <div class="topbar-left">
+                        <button type="button" class="menu-toggle-btn" onclick="toggleSidebar()">☰</button>
+                        <div class="topbar-title">ChargeSmart EV Platform</div>
+                    </div>
+
+                    <div class="topbar-user">
+                        <span class="topbar-user-badge"></span>
+                        {% if user.is_authenticated %}
+                            Welcome, {{ user.username }}
+                        {% else %}
+                            Smart EV Charging Experience
+                        {% endif %}
+                    </div>
+                </div>
             </div>
+
+            <div class="main-content page-area">
+                <div class="container mt-3">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% elif message.tags == 'warning' %}alert-warning{% else %}alert-info{% endif %} alert-dismissible fade show custom-alert" role="alert">
+                                <span class="alert-icon">
+                                    {% if message.tags == 'success' %}
+                                        ✔
+                                    {% elif message.tags == 'error' %}
+                                        ✖
+                                    {% elif message.tags == 'warning' %}
+                                        ⚠
+                                    {% else %}
+                                        ℹ
+                                    {% endif %}
+                                </span>
+
+                                {{ message }}
+
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                {% block content %}
+                {% endblock %}
+            </div>
+
+            <footer>© 2026 ChargeSmart. Smart EV Charging Station Booking System.</footer>
         </div>
-    </nav>
-
-    <div class="main-content">
-        <div class="container mt-3">
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show custom-alert" role="alert">
-                <span class="alert-icon">✔</span>
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        {% endfor %}
-    {% endif %}
-</div>
-
-        {% block content %}
-        {% endblock %}
     </div>
 
-    <footer>
-        © 2026 ChargeSmart. Smart EV Charging Station Booking System.
-    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 
-</div>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const contentShell = document.getElementById('contentShell');
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+            if (window.innerWidth <= 991) {
+                sidebar.classList.toggle('open');
+            } else {
+                sidebar.classList.toggle('closed');
+                contentShell.classList.toggle('full-width');
+            }
+        }
+
+       
+    </script>
 </body>
 </html>

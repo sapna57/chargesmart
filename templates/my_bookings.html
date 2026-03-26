@@ -127,6 +127,23 @@
         color: #ff9d9d;
         border: 1px solid rgba(255, 157, 157, 0.25);
     }
+    .status-verified {
+    background: rgba(79, 172, 254, 0.18);
+    color: #9fc0ff;
+    border: 1px solid rgba(159, 192, 255, 0.25);
+}
+
+.status-charging {
+    background: rgba(255, 193, 7, 0.18);
+    color: #ffd86b;
+    border: 1px solid rgba(255, 216, 107, 0.25);
+}
+
+.status-completed {
+    background: rgba(88, 240, 179, 0.18);
+    color: #7fffd4;
+    border: 1px solid rgba(127, 255, 212, 0.25);
+}
 
     .section-divider {
         height: 1px;
@@ -160,6 +177,31 @@
         font-size: 0.94rem;
         line-height: 1.45;
         word-break: break-word;
+    }
+
+    .qr-box {
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.06);
+        {% comment %} border: 2px solid #58f0b3; {% endcomment %}
+        border-radius: 16px;
+        padding: 14px;
+        margin-bottom: 16px;
+        text-align: center;
+    }
+
+    .qr-label {
+        color: #8fb8ff;
+        font-size: 0.78rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .qr-image {
+        width: 140px;
+        height: 140px;
+        border-radius: 12px;
+        background: white;
+        padding: 8px;
     }
 
     .vehicle-box {
@@ -245,6 +287,7 @@
             flex-direction: column;
             align-items: flex-start;
         }
+    
     }
 </style>
 
@@ -270,13 +313,33 @@
                                 </div>
 
                                 {% if booking.status == 'Booked' %}
-                                    <span class="status-badge status-booked">Booked</span>
-                                {% else %}
-                                    <span class="status-badge status-cancelled">Cancelled</span>
-                                {% endif %}
+    <span class="status-badge status-booked">Booked</span>
+{% elif booking.status == 'Verified' %}
+    <span class="status-badge status-verified">Verified</span>
+{% elif booking.status == 'Charging' %}
+    <span class="status-badge status-charging">Charging</span>
+{% elif booking.status == 'Completed' %}
+    <span class="status-badge status-completed">Completed</span>
+{% elif booking.status == 'Cancelled' %}
+    <span class="status-badge status-cancelled">Cancelled</span>
+{% else %}
+    <span class="status-badge status-cancelled">{{ booking.status }}</span>
+{% endif %}
                             </div>
 
                             <div class="section-divider"></div>
+
+                            <div class="info-box" style="margin-bottom: 14px;">
+                                <div class="info-label">Booking ID</div>
+                                <div class="info-value">{{ booking.booking_id|default:"Not Available" }}</div>
+                            </div>
+
+                            {% if booking.qr_code_base64 %}
+                                <div class="qr-box">
+                                    <div class="qr-label">Scan this QR at charging station for verification</div>
+                                    <img src="data:image/png;base64,{{ booking.qr_code_base64 }}" alt="Booking QR Code" class="qr-image">
+                                </div>
+                            {% endif %}
 
                             <div class="info-grid">
                                 <div class="info-box">
@@ -306,17 +369,38 @@
                             </div>
 
                             {% if booking.status == 'Booked' %}
-                                <a href="{% url 'cancel_booking' booking.id %}" class="btn btn-cancel">
-                                    Cancel Booking
-                                </a>
-                                <div class="booking-footnote">
-                                    Cancel only if you no longer need this charging slot.
-                                </div>
-                            {% else %}
-                                <div class="booking-footnote">
-                                    This booking is no longer active.
-                                </div>
-                            {% endif %}
+    <a href="{% url 'cancel_booking' booking.id %}" class="btn btn-cancel">
+        Cancel Booking
+    </a>
+    <div class="booking-footnote">
+        Cancel only if you no longer need this charging slot.
+    </div>
+
+{% elif booking.status == 'Verified' %}
+    <div class="booking-footnote">
+        Your arrival has been verified by the station owner.
+    </div>
+
+{% elif booking.status == 'Charging' %}
+    <div class="booking-footnote">
+        Your vehicle is currently charging.
+    </div>
+
+{% elif booking.status == 'Completed' %}
+    <div class="booking-footnote">
+        Charging session completed successfully.
+    </div>
+
+{% elif booking.status == 'Cancelled' %}
+    <div class="booking-footnote">
+        This booking has been cancelled.
+    </div>
+
+{% else %}
+    <div class="booking-footnote">
+        Booking status: {{ booking.status }}
+    </div>
+{% endif %}
                         </div>
                     </div>
                 {% endfor %}

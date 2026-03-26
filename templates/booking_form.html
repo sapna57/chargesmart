@@ -4,69 +4,159 @@
 
 <style>
     .booking-section {
-        min-height: 85vh;
+        min-height: calc(100vh - 120px);
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 40px 0;
+        padding: 42px 18px 56px;
     }
 
     .booking-card {
-        background: rgba(255,255,255,0.08);
-        border-radius: 20px;
-        padding: 35px;
         width: 100%;
-        max-width: 600px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        max-width: 760px;
+        border-radius: 32px;
+        padding: 34px;
+        background:
+            linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05)),
+            radial-gradient(circle at top right, rgba(88,240,179,0.08), transparent 24%);
+        border: 1px solid rgba(255,255,255,0.08);
+        box-shadow: 0 24px 48px rgba(0,0,0,0.22);
+        backdrop-filter: blur(16px);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .booking-card::before {
+        content: "";
+        position: absolute;
+        top: -70px;
+        right: -70px;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(88,240,179,0.14), transparent 70%);
+        pointer-events: none;
     }
 
     .booking-title {
-        font-size: 2rem;
-        font-weight: 700;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 2.7rem;
+        font-weight: 800;
+        letter-spacing: -0.03em;
         margin-bottom: 10px;
         text-align: center;
+        position: relative;
+        z-index: 1;
     }
 
     .booking-subtitle {
         text-align: center;
-        color: #cbd5e1;
-        margin-bottom: 25px;
+        color: #cdd9ee;
+        font-size: 1.02rem;
+        margin-bottom: 28px;
+        position: relative;
+        z-index: 1;
     }
 
     .station-box {
-        background: rgba(255,255,255,0.06);
-        border-radius: 14px;
-        padding: 16px;
-        margin-bottom: 20px;
-        color: #dbe7ff;
+        background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.04));
+        border-radius: 22px;
+        padding: 22px;
+        margin-bottom: 26px;
+        color: #e5eefc;
+        border: 1px solid rgba(255,255,255,0.07);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+        position: relative;
+        z-index: 1;
     }
 
-.form-control, .form-control:focus, textarea.form-control {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.15);
-    color: white;
-    border-radius: 12px;
-    padding: 12px;
-    box-shadow: none;
-}
+    .station-box strong {
+        color: #ffffff;
+        font-weight: 800;
+    }
 
-select.form-control {
-    color: white;
-}
+    .station-row {
+        line-height: 1.8;
+        font-size: 1.05rem;
+    }
 
-select.form-control option {
-    color: black;
-    background: white;
-}
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 16px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 800;
+    }
+
+    .status-available {
+        background: rgba(25, 195, 125, 0.18);
+        color: #8af7bf;
+        border: 1px solid rgba(125, 255, 191, 0.22);
+    }
+
+    .status-full {
+        background: rgba(255, 107, 107, 0.18);
+        color: #ffaaaa;
+        border: 1px solid rgba(255, 157, 157, 0.22);
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px 18px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .form-group-full {
+        grid-column: 1 / -1;
+    }
+
+    .form-label {
+        color: #eef4ff;
+        margin-bottom: 10px;
+        font-weight: 700;
+        font-size: 1rem;
+    }
+
+    .form-control,
+    .form-control:focus,
+    textarea.form-control {
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.12);
+        color: white;
+        border-radius: 16px;
+        padding: 15px 16px;
+        box-shadow: none;
+        font-size: 1rem;
+        transition: all 0.25s ease;
+    }
+
+    .form-control:hover {
+        border-color: rgba(143,184,255,0.20);
+    }
+
+    .form-control:focus,
+    textarea.form-control:focus {
+        border-color: rgba(88,240,179,0.30);
+        background: rgba(255,255,255,0.10);
+        box-shadow: 0 0 0 4px rgba(88,240,179,0.08);
+    }
 
     .form-control::placeholder {
         color: #b8c4d8;
     }
 
-    .form-label {
-        color: #e5edf8;
-        margin-bottom: 8px;
-        font-weight: 500;
+    select.form-control {
+        color: white;
+    }
+
+    select.form-control option {
+        color: black;
+        background: white;
     }
 
     .booking-btn {
@@ -74,41 +164,49 @@ select.form-control option {
         background: linear-gradient(90deg, #19c37d, #12a66a);
         color: white;
         border: none;
-        border-radius: 12px;
-        padding: 12px;
-        font-weight: 600;
-        margin-top: 10px;
+        border-radius: 18px;
+        padding: 16px;
+        font-weight: 800;
+        font-size: 1rem;
+        margin-top: 22px;
+        box-shadow: 0 16px 28px rgba(25,195,125,0.22);
+        transition: 0.28s ease;
+        position: relative;
+        z-index: 1;
     }
 
     .booking-btn:hover {
         background: linear-gradient(90deg, #18b172, #108e5c);
+        transform: translateY(-2px);
+        box-shadow: 0 20px 34px rgba(25,195,125,0.28);
     }
 
     .booking-btn:disabled {
         background: rgba(255,255,255,0.12);
         color: #cbd5e1;
         cursor: not-allowed;
+        box-shadow: none;
+        transform: none;
     }
 
-    .status-badge {
-        display: inline-block;
-        margin-top: 12px;
-        padding: 6px 12px;
-        border-radius: 999px;
-        font-size: 0.82rem;
-        font-weight: 700;
-    }
+    @media (max-width: 768px) {
+        .booking-card {
+            padding: 24px 18px;
+            border-radius: 24px;
+        }
 
-    .status-available {
-        background: rgba(25, 195, 125, 0.18);
-        color: #7dffbf;
-        border: 1px solid rgba(125, 255, 191, 0.25);
-    }
+        .booking-title {
+            font-size: 2.1rem;
+        }
 
-    .status-full {
-        background: rgba(255, 107, 107, 0.18);
-        color: #ff9d9d;
-        border: 1px solid rgba(255, 157, 157, 0.25);
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .station-row {
+            font-size: 0.98rem;
+            line-height: 1.7;
+        }
     }
 </style>
 
@@ -118,103 +216,107 @@ select.form-control option {
         <p class="booking-subtitle">Fill your details to confirm your EV charging slot</p>
 
         <div class="station-box">
-            <strong>Station:</strong> {{ station.name }}<br>
-            <strong>City:</strong> {{ station.city }}<br>
-            <strong>Charger Type:</strong> {{ station.charger_type }}<br>
-            <strong>Available Slots:</strong> {{ station.available_slots }}<br>
-            <strong>Price:</strong> ₹{{ station.price_per_kwh }}/kWh<br>
+            <div class="station-row">
+                <strong>Station:</strong> {{ station.name }}<br>
+                <strong>City:</strong> {{ station.city }}<br>
+                <strong>Charger Type:</strong> {{ station.charger_type }}<br>
+                <strong>Available Slots:</strong> {{ station.available_slots }}<br>
+                <strong>Price:</strong> ₹{{ station.price_per_kwh }}/kWh
+            </div>
 
             {% if station.available_slots > 0 %}
-                <span class="status-badge status-available">Available</span>
+                <span class="status-badge status-available">⚡ Available</span>
             {% else %}
-                <span class="status-badge status-full">Full</span>
+                <span class="status-badge status-full">✖ Full</span>
             {% endif %}
         </div>
 
         <form method="POST">
             {% csrf_token %}
 
-            <div class="mb-3">
-    <label class="form-label">Full Name</label>
-    <input
-        type="text"
-        name="full_name"
-        class="form-control"
-        value="{{ request.user.first_name }}"
-        placeholder="Enter your full name"
-        pattern="[A-Za-z ]+"
-        title="Full name should contain only letters and spaces"
-        required>
-</div>
+            <div class="form-grid">
+                <div>
+                    <label class="form-label">Full Name</label>
+                    <input
+                        type="text"
+                        name="full_name"
+                        class="form-control"
+                        value="{{ request.user.first_name }}"
+                        placeholder="Enter your full name"
+                        pattern="[A-Za-z ]+"
+                        title="Full name should contain only letters and spaces"
+                        required>
+                </div>
 
-<div class="mb-3">
-    <label class="form-label">Email ID</label>
-    <input
-        type="email"
-        name="email"
-        class="form-control"
-        value="{{ request.user.email }}"
-        placeholder="Enter your email"
-        required>
-</div>
+                <div>
+                    <label class="form-label">Email ID</label>
+                    <input
+                        type="email"
+                        name="email"
+                        class="form-control"
+                        value="{{ request.user.email }}"
+                        placeholder="Enter your email"
+                        required>
+                </div>
 
-<div class="mb-3">
-    <label class="form-label">Phone Number</label>
-    <input
-        type="text"
-        name="phone_number"
-        class="form-control"
-        placeholder="Enter your 10-digit phone number"
-        pattern="[0-9]{10}"
-        maxlength="10"
-        title="Phone number must contain exactly 10 digits"
-        required>
-</div>
+                <div>
+                    <label class="form-label">Phone Number</label>
+                    <input
+                        type="text"
+                        name="phone_number"
+                        class="form-control"
+                        placeholder="Enter your 10-digit phone number"
+                        pattern="[0-9]{10}"
+                        maxlength="10"
+                        title="Phone number must contain exactly 10 digits"
+                        required>
+                </div>
 
-<div class="mb-3">
-    <label class="form-label">Address</label>
-    <textarea name="address" class="form-control" rows="3" placeholder="Enter your address" required></textarea>
-</div>
+                <div>
+                    <label class="form-label">Vehicle Type</label>
+                    <select name="vehicle_type" class="form-control" required>
+                        <option value="">Select vehicle type</option>
+                        <option value="2 Wheeler">2 Wheeler</option>
+                        <option value="4 Wheeler">4 Wheeler</option>
+                    </select>
+                </div>
 
-<div class="mb-3">
-    <label class="form-label">Vehicle Type</label>
-    <select name="vehicle_type" class="form-control" required>
-        <option value="">Select vehicle type</option>
-        <option value="2 Wheeler">2 Wheeler</option>
-        <option value="4 Wheeler">4 Wheeler</option>
-    </select>
-</div>
+                <div>
+                    <label class="form-label">Vehicle Number</label>
+                    <input
+                        type="text"
+                        name="vehicle_number"
+                        class="form-control"
+                        placeholder="Enter your vehicle number"
+                        pattern="[A-Za-z0-9 ]+"
+                        title="Vehicle number can contain letters, numbers, and spaces only">
+                </div>
 
-<div class="mb-3">
-    <label class="form-label">Vehicle Number</label>
-    <input
-        type="text"
-        name="vehicle_number"
-        class="form-control"
-        placeholder="Enter your vehicle number"
-        pattern="[A-Za-z0-9 ]+"
-        title="Vehicle number can contain letters, numbers, and spaces only">
-</div>
+                <div>
+                    <label class="form-label">Charging Date</label>
+                    <input type="date" name="booking_date" class="form-control" required>
+                </div>
 
-<div class="mb-3">
-    <label class="form-label">Charging Date</label>
-    <input type="date" name="booking_date" class="form-control" required>
-</div>
+                <div class="form-group-full">
+                    <label class="form-label">Address</label>
+                    <textarea name="address" class="form-control" rows="3" placeholder="Enter your address" required></textarea>
+                </div>
 
-<div class="mb-3">
-    <label class="form-label">Time Slot</label>
-    <select name="time_slot" class="form-control" required>
-        <option value="">Select time slot</option>
-        <option value="09:00 AM - 10:00 AM">09:00 AM - 10:00 AM</option>
-        <option value="10:00 AM - 11:00 AM">10:00 AM - 11:00 AM</option>
-        <option value="11:00 AM - 12:00 PM">11:00 AM - 12:00 PM</option>
-        <option value="12:00 PM - 01:00 PM">12:00 PM - 01:00 PM</option>
-        <option value="02:00 PM - 03:00 PM">02:00 PM - 03:00 PM</option>
-        <option value="03:00 PM - 04:00 PM">03:00 PM - 04:00 PM</option>
-        <option value="04:00 PM - 05:00 PM">04:00 PM - 05:00 PM</option>
-        <option value="05:00 PM - 06:00 PM">05:00 PM - 06:00 PM</option>
-    </select>
-</div>
+                <div class="form-group-full">
+                    <label class="form-label">Time Slot</label>
+                    <select name="time_slot" class="form-control" required>
+                        <option value="">Select time slot</option>
+                        <option value="09:00 AM - 10:00 AM">09:00 AM - 10:00 AM</option>
+                        <option value="10:00 AM - 11:00 AM">10:00 AM - 11:00 AM</option>
+                        <option value="11:00 AM - 12:00 PM">11:00 AM - 12:00 PM</option>
+                        <option value="12:00 PM - 01:00 PM">12:00 PM - 01:00 PM</option>
+                        <option value="02:00 PM - 03:00 PM">02:00 PM - 03:00 PM</option>
+                        <option value="03:00 PM - 04:00 PM">03:00 PM - 04:00 PM</option>
+                        <option value="04:00 PM - 05:00 PM">04:00 PM - 05:00 PM</option>
+                        <option value="05:00 PM - 06:00 PM">05:00 PM - 06:00 PM</option>
+                    </select>
+                </div>
+            </div>
 
             {% if station.available_slots > 0 %}
                 <button type="submit" class="booking-btn">Confirm Booking</button>
